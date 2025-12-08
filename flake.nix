@@ -277,6 +277,7 @@
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
                                                                             echo 01cdbfb9
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
+                                                                            ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
                                                                             echo f7d8bbb9
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
@@ -288,7 +289,7 @@
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
                                                                             echo 41739c3c
-                                                                            iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
+                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
                                                                             echo f1736463
