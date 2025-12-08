@@ -279,7 +279,7 @@
                                             expected ? "24a5ba9c" ,
                                             gc-roots-directory ? "8584bd77" ,
                                             links-directory ? "e036a7bd" ,
-                                            locks-directory ? "4c3fa402"
+                                            locks-directory ? "4c3fa402" ,
                                             mounts-directory ? "cfef9d2a" ,
                                             quarantine-directory ? "58c023ee"
                                         } :
