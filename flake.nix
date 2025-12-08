@@ -105,6 +105,7 @@
                                                                                                                     '
                                                                                                             )" || failure e6780fa1
                                                                                                             redis-cli PUBLISH ${ channel } "$JSON" > /dev/null
+                                                                                                            echo 2c40a98d
                                                                                                             yq eval --prettyPrint "." - <<< "$JSON"
                                                                                                             rm --force "${ quarantine-directory }/$INDEX/release.sh"
                                                                                                             rm --recursive --force "${ quarantine-directory }/$INDEX/release"
@@ -187,6 +188,7 @@
                                                                                            RELEASE_RESOLUTIONS_JSON="[${ builtins.concatStringsSep "" [ "$" "{" "RELEASE_RESOLUTIONS_JSON_1%," "}" ] }]"
                                                                                            STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
                                                                                            STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
+                                                                                           echo 2e518351
                                                                                            jq \
                                                                                                --null-input \
                                                                                                --arg HASH "$HASH" \
@@ -238,13 +240,18 @@
                                                                     if [[ ${ channel } == "$CHANNEL" ]]
                                                                     then
                                                                         read -r PAYLOAD
+                                                                        echo 4fef9dcc
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
+                                                                            echo de733623
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
+                                                                            echo 01cdbfb9
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
+                                                                            echo f7d8bbb9
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
+                                                                            echo c5eb1357
                                                                             yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
@@ -252,9 +259,12 @@
                                                                             iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
+                                                                            echo f1736463
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
+                                                                            echo 2af3878e
                                                                             RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
                                                                             RESOLUTIONS=()
+                                                                            echo 50f87dd5
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
@@ -262,6 +272,7 @@
                                                                             iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
                                                                         elif [[ "resolve-release" == "$TYPE_" ]]
                                                                         then
+                                                                            echo 5b9ab88f
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 182712c3
                                                                             iteration --index "$INDEX"
                                                                         fi
