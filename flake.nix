@@ -253,6 +253,9 @@
                                                                             RESOLUTIONS=()
                                                                             echo c5eb1357
                                                                             yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
+                                                                            echo 5a04507b
+                                                                            yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
+                                                                            echo 95314672
                                                                             yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
