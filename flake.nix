@@ -14,6 +14,7 @@
                                     channel ,
                                     gc-roots-directory ,
                                     links-directory ,
+                                    locks-directory ,
                                     mounts-directory ,
                                     quarantine-directory
                                 } :
@@ -157,7 +158,7 @@
                                                                                        export HASH
                                                                                        if [[ -n "$HASH" ]]
                                                                                        then
-                                                                                           exec 203> "/home/${ config.personal.name }/resources/locks/$HASH.lock"
+                                                                                           exec 203> "${ locks-directory }/$HASH.lock"
                                                                                            flock -x 203
                                                                                        fi
                                                                                        export INDEX
@@ -278,6 +279,7 @@
                                             expected ? "24a5ba9c" ,
                                             gc-roots-directory ? "8584bd77" ,
                                             links-directory ? "e036a7bd" ,
+                                            locks-directory ? "4c3fa402"
                                             mounts-directory ? "cfef9d2a" ,
                                             quarantine-directory ? "58c023ee"
                                         } :
@@ -297,6 +299,7 @@
                                                                                         channel = channel ;
                                                                                         gc-roots-directory = gc-roots-directory ;
                                                                                         links-directory = links-directory ;
+                                                                                        locks-directory = locks-directory ;
                                                                                         mounts-directory = mounts-directory ;
                                                                                         quarantine-directory = quarantine-directory ;
                                                                                     }
