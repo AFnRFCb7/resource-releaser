@@ -157,16 +157,16 @@
                                                                                            echo 60ba11e6
                                                                                        fi
                                                                                        echo d0ac2ca6
-                                                                                       cat <<EOF
-                                                                                       find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
-                                                                                       EOF
-                                                                                       echo 0ffdc849
-                                                                                       while find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
-                                                                                       do
-                                                                                            echo 086770fe
-                                                                                            sleep 1
-                                                                                            echo cbcc2a6d
-                                                                                       done
+                                                                                       # cat <<EOF
+                                                                                       # find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
+                                                                                       # EOF
+                                                                                       # echo 0ffdc849
+                                                                                       # while find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
+                                                                                       # do
+                                                                                       #      echo 086770fe
+                                                                                       #      sleep 1
+                                                                                       #      echo cbcc2a6d
+                                                                                       # done
                                                                                        echo 08bb4f61
                                                                                        export HASH
                                                                                        echo 8253cab2
