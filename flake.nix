@@ -252,10 +252,12 @@
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
                                                                             echo c5eb1357
+                                                                            yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
                                                                             yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
+                                                                            echo 41739c3c
                                                                             iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
