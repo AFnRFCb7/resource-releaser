@@ -245,7 +245,9 @@
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
+                                                                            echo 333b73a9
                                                                             yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
+                                                                            echo 5442ed23
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
