@@ -273,7 +273,12 @@
                                 {
                                     check =
                                         {
-
+                                            channel ? "c8807213" ,
+                                            expected ? "24a5ba9c" ,
+                                            gc-roots-directory ? "8584bd77" ,
+                                            links-directory ? "e036a7bd" ,
+                                            mounts-directory ? "cfef9d2a" ,
+                                            quarantine-directory ? "58c023ee"
                                         } :
                                             pkgs.stdenv.mkDerivation
                                                 {
@@ -283,6 +288,18 @@
                                                         [
                                                             (
                                                                 let
+                                                                    observed =
+                                                                        builtins.toString
+                                                                            (
+                                                                                implementation
+                                                                                    {
+                                                                                        channel = channel ;
+                                                                                        gc-roots-directory = gc-roots-directory ;
+                                                                                        links-directory = links-directory ;
+                                                                                        mounts-directory = mounts-directory ;
+                                                                                        quarantine-directory = quarantine-directory ;
+                                                                                    }
+                                                                            ) ;
                                                                     in
                                                                         if expected == observed then
                                                                             pkgs.writeShellApplication
