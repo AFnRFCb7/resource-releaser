@@ -199,9 +199,15 @@
                                                                                        then
                                                                                             echo 26908c6e
                                                                                            TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
-                                                                                           tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                           rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                           nix collect
+                                                                                           if [[ -d "${ quarantine-directory }/$INDEX" ]]
+                                                                                           then
+                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                            else
+                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                            fi
+                                                                                           # nix-collect-garbage
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
