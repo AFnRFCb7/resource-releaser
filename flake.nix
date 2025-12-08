@@ -109,6 +109,7 @@
                                                                                                             rm --recursive --force "${ quarantine-directory }/$INDEX/release"
                                                                                                         '' ;
                                                                                                 } ;
+                                                                                        in "${ application }/bin/resolve" ;
                                                                                 in
                                                                                     ''
                                                                                        INDEX=
