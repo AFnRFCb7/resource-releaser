@@ -180,6 +180,7 @@
                                                                                        fi
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
+                                                                                            echo 26908c6e
                                                                                            TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
                                                                                            tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                            rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
@@ -191,6 +192,8 @@
                                                                                            STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
                                                                                            STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
                                                                                            echo 2e518351
+                                                                                           echo "$STATUS"
+                                                                                           cat "$STANDARD_ERROR_FILE"
                                                                                            jq \
                                                                                                --null-input \
                                                                                                --arg HASH "$HASH" \
@@ -211,23 +214,24 @@
                                                                                                    "standard-output" : $STANDARD_OUTPUT ,
                                                                                                    "status" : $STATUS
                                                                                                }' | yq eval --prettyPrint '.' - > "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                               chmod 0400 "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                               export ARGUMENTS="\$ARGUMENTS"
-                                                                                               export ARGUMENTS_JSON="\$ARGUMENTS_JSON"
-                                                                                               export HAS_STANDARD_INPUT="\$HAS_STANDARD_INPUT"
-                                                                                               export JSON="\$JSON"
-                                                                                               export INDEX
-                                                                                               export STANDARD_INPUT="\$STANDARD_INPUT"
-                                                                                               export TYPE="resolve-release"
-                                                                                               MODE=false RESOLUTION=release envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release.sh"
-                                                                                               chmod 0500 "${ quarantine-directory }/$INDEX/release.sh"
-                                                                                               for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
-                                                                                               do
-                                                                                                   envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
-                                                                                                   chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
-                                                                                               done
-                                                                                           fi
-                                                                                           rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
+                                                                                           echo 81648b03
+                                                                                           chmod 0400 "${ quarantine-directory }/$INDEX/release.yaml"
+                                                                                           export ARGUMENTS="\$ARGUMENTS"
+                                                                                           export ARGUMENTS_JSON="\$ARGUMENTS_JSON"
+                                                                                           export HAS_STANDARD_INPUT="\$HAS_STANDARD_INPUT"
+                                                                                           export JSON="\$JSON"
+                                                                                           export INDEX
+                                                                                           export STANDARD_INPUT="\$STANDARD_INPUT"
+                                                                                           export TYPE="resolve-release"
+                                                                                           MODE=false RESOLUTION=release envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release.sh"
+                                                                                           chmod 0500 "${ quarantine-directory }/$INDEX/release.sh"
+                                                                                           for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
+                                                                                           do
+                                                                                               envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
+                                                                                               chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
+                                                                                           done
+                                                                                       fi
+                                                                                       rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
                                                                                     '' ;
                                                                     }
                                                             )
@@ -254,8 +258,6 @@
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
                                                                             echo c5eb1357
-                                                                            yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
-                                                                            echo 5a04507b
                                                                             yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
                                                                             echo 95314672
                                                                             yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
