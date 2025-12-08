@@ -106,7 +106,6 @@
                                                                                                                     '
                                                                                                             )" || failure e6780fa1
                                                                                                             redis-cli PUBLISH ${ channel } "$JSON" > /dev/null
-                                                                                                            echo 2c40a98d
                                                                                                             yq eval --prettyPrint "." - <<< "$JSON"
                                                                                                             rm --force "${ quarantine-directory }/$INDEX/release.sh"
                                                                                                             rm --recursive --force "${ quarantine-directory }/$INDEX/release"
@@ -139,7 +138,6 @@
                                                                                                    shift 2
                                                                                                    ;;
                                                                                                --resolution)
-                                                                                                   echo "1de00768 RESOLUTION=$2"
                                                                                                    RESOLUTIONS+=("$2")
                                                                                                    shift 2
                                                                                                    ;;
@@ -149,40 +147,27 @@
                                                                                            esac
                                                                                        done
                                                                                        export ORIGINATOR_PID
-                                                                                       echo 85260be2
                                                                                        if [[ -n "$ORIGINATOR_PID" ]]
                                                                                        then
-                                                                                            echo 5b144671
                                                                                            tail --follow /dev/null --pid "$ORIGINATOR_PID"
-                                                                                           echo 60ba11e6
                                                                                        fi
-                                                                                       echo d0ac2ca6
                                                                                        cat <<EOF
                                                                                        find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
                                                                                        EOF
-                                                                                       echo 0ffdc849
                                                                                        while find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
                                                                                        do
-                                                                                            echo 086770fe
                                                                                             sleep 1
-                                                                                            echo cbcc2a6d
                                                                                        done
-                                                                                       echo 08bb4f61
                                                                                        export HASH
-                                                                                       echo 8253cab2
                                                                                        if [[ -n "$HASH" ]]
                                                                                        then
-                                                                                            echo 455fd56e
                                                                                            exec 203> "${ locks-directory }/$HASH.lock"
                                                                                            flock -x 203
-                                                                                           echo 7f0a11d0
                                                                                        fi
-                                                                                       echo ee907902
                                                                                        export INDEX
                                                                                        export RELEASE
                                                                                        STANDARD_OUTPUT_FILE="$( mktemp )" || failure 5e6fd302
                                                                                        STANDARD_ERROR_FILE="$( mktemp )" || failure da84a50d
-                                                                                       echo a8865ea0 RELEASE "$RELEASE"
                                                                                        if [[ -n "$RELEASE" ]]
                                                                                        then
                                                                                            if release-application > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
@@ -194,10 +179,8 @@
                                                                                        else
                                                                                            STATUS=0
                                                                                        fi
-                                                                                       echo a8865ea0
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
-                                                                                            echo 26908c6e
                                                                                            TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
                                                                                            if [[ -d "${ quarantine-directory }/$INDEX" ]]
                                                                                            then
@@ -214,8 +197,6 @@
                                                                                            RELEASE_RESOLUTIONS_JSON="[${ builtins.concatStringsSep "" [ "$" "{" "RELEASE_RESOLUTIONS_JSON_1%," "}" ] }]"
                                                                                            STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
                                                                                            STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
-                                                                                           echo 2e518351
-                                                                                           echo "$STATUS"
                                                                                            cat "$STANDARD_ERROR_FILE"
                                                                                            jq \
                                                                                                --null-input \
@@ -237,7 +218,6 @@
                                                                                                    "standard-output" : $STANDARD_OUTPUT ,
                                                                                                    "status" : $STATUS
                                                                                                }' | yq eval --prettyPrint '.' - > "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                           echo 81648b03
                                                                                            chmod 0400 "${ quarantine-directory }/$INDEX/release.yaml"
                                                                                            export ARGUMENTS="\$ARGUMENTS"
                                                                                            export ARGUMENTS_JSON="\$ARGUMENTS_JSON"
@@ -269,35 +249,25 @@
                                                                     if [[ ${ channel } == "$CHANNEL" ]]
                                                                     then
                                                                         read -r PAYLOAD
-                                                                        echo 4fef9dcc
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
-                                                                            echo de733623
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
-                                                                            echo 01cdbfb9
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
                                                                             ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
-                                                                            echo f7d8bbb9
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
-                                                                            echo c5eb1357
                                                                             yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
-                                                                            echo 95314672
                                                                             yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
-                                                                            echo 41739c3c
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
-                                                                            echo f1736463
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
-                                                                            echo 2af3878e
                                                                             RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
                                                                             RESOLUTIONS=()
-                                                                            echo 50f87dd5
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
@@ -305,7 +275,6 @@
                                                                             iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
                                                                         elif [[ "resolve-release" == "$TYPE_" ]]
                                                                         then
-                                                                            echo 5b9ab88f
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 182712c3
                                                                             iteration --index "$INDEX"
                                                                         fi
