@@ -270,7 +270,7 @@
                                                             done
                                                         '' ;
                                                 } ;
-                                        in "$ application }/bin/resource-releaser" ;
+                                        in "${ application }/bin/resource-releaser" ;
                             in
                                 {
                                     check =
