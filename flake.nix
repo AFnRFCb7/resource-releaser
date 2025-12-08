@@ -149,24 +149,36 @@
                                                                                            esac
                                                                                        done
                                                                                        export ORIGINATOR_PID
+                                                                                       echo 85260be2
                                                                                        if [[ -n "$ORIGINATOR_PID" ]]
                                                                                        then
+                                                                                            echo 5b144671
                                                                                            tail --follow /dev/null --pid "$ORIGINATOR_PID"
+                                                                                           echo 60ba11e6
                                                                                        fi
+                                                                                       echo d0ac2ca6
                                                                                        while find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
                                                                                        do
+                                                                                            echo 086770fe
                                                                                             sleep 1
+                                                                                            echo cbcc2a6d
                                                                                        done
+                                                                                       echo 08bb4f61
                                                                                        export HASH
+                                                                                       echo 08bb4f61
                                                                                        if [[ -n "$HASH" ]]
                                                                                        then
+                                                                                            echo 455fd56e
                                                                                            exec 203> "${ locks-directory }/$HASH.lock"
                                                                                            flock -x 203
+                                                                                           echo 7f0a11d0
                                                                                        fi
+                                                                                       echo ee907902
                                                                                        export INDEX
                                                                                        export RELEASE
                                                                                        STANDARD_OUTPUT_FILE="$( mktemp )" || failure 5e6fd302
                                                                                        STANDARD_ERROR_FILE="$( mktemp )" || failure da84a50d
+                                                                                       echo a8865ea0 RELEASE "$RELEASE"
                                                                                        if [[ -n "$RELEASE" ]]
                                                                                        then
                                                                                            if release-application > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
@@ -178,6 +190,7 @@
                                                                                        else
                                                                                            STATUS=0
                                                                                        fi
+                                                                                       echo a8865ea0
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
                                                                                             echo 26908c6e
