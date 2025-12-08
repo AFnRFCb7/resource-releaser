@@ -146,7 +146,7 @@
                                                                                                *)
                                                                                                    failure 464417ef
                                                                                                    ;;
-                                                                                           esac1
+                                                                                           esac
                                                                                        done
                                                                                        export ORIGINATOR_PID
                                                                                        if [[ -n "$ORIGINATOR_PID" ]]
