@@ -285,7 +285,7 @@
                                         } :
                                             pkgs.stdenv.mkDerivation
                                                 {
-                                                    installPhase = ''execute-test "$0"'' ;
+                                                    installPhase = ''execute-test "$out"'' ;
                                                     name = "check" ;
                                                     nativeBuildInputs =
                                                         [
