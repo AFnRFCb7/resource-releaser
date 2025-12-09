@@ -151,30 +151,39 @@
                                                                                        then
                                                                                            tail --follow /dev/null --pid "$ORIGINATOR_PID"
                                                                                        fi
+                                                                                       echo 45ed31db
                                                                                        cat <<EOF
                                                                                        find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
                                                                                        EOF
+                                                                                       mkdir --parents "${ links-directory }"
                                                                                        while find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
                                                                                        do
                                                                                             sleep 1
                                                                                        done
+                                                                                       echo 91957a5b
                                                                                        export HASH
+                                                                                       mkdir --parents "${ locks-directory }"
                                                                                        if [[ -n "$HASH" ]]
                                                                                        then
                                                                                            exec 203> "${ locks-directory }/$HASH.lock"
                                                                                            flock -x 203
                                                                                        fi
+                                                                                       echo a8a940db
                                                                                        export INDEX
                                                                                        export RELEASE
                                                                                        STANDARD_OUTPUT_FILE="$( mktemp )" || failure 5e6fd302
                                                                                        STANDARD_ERROR_FILE="$( mktemp )" || failure da84a50d
+                                                                                       echo ccc5f4f7
                                                                                        if [[ -n "$RELEASE" ]]
                                                                                        then
+                                                                                            echo 7198799f
                                                                                            if release-application > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                            then
                                                                                                STATUS="$?"
+                                                                                                echo 07a63a51
                                                                                            else
                                                                                                STATUS="$?"
+                                                                                               echo 2e9e7adb
                                                                                            fi
                                                                                        else
                                                                                            STATUS=0
