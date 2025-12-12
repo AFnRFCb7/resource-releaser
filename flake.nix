@@ -151,8 +151,8 @@
                                                                                        then
                                                                                            tail --follow /dev/null --pid "$ORIGINATOR_PID"
                                                                                        fi
-                                                                                       mkdir --parents "${ links-directory }"
-                                                                                       while find "${ links-directory }" -mindepth 2 -maxdepth 2 -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
+                                                                                       mkdir --parents "${ gc-roots-directory }"
+                                                                                       while find "${ gc-roots-directory }" -type l -exec readlink -f {} \; | grep --quiet "${ mounts-directory }/$INDEX"
                                                                                        do
                                                                                             sleep 1
                                                                                        done
