@@ -39,6 +39,7 @@
                                                                                 pkgs.gettext
                                                                                 pkgs.gnutar
                                                                                 pkgs.jq
+                                                                                pkgs.nix
                                                                                 pkgs.xz
                                                                                 failure
                                                                                 (
@@ -189,7 +190,7 @@
                                                                                                 tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                                 rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             fi
-                                                                                           # nix-collect-garbage
+                                                                                           nix-collect-garbage
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
