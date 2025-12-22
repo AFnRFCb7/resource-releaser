@@ -16,7 +16,8 @@
                                     links-directory ,
                                     locks-directory ,
                                     mounts-directory ,
-                                    quarantine-directory
+                                    quarantine-directory ,
+                                    trace-directory
                                 } :
                                     let
                                         application =
@@ -184,11 +185,11 @@
                                                                                            TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
                                                                                            if [[ -d "${ quarantine-directory }/$INDEX" ]]
                                                                                            then
-                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ trace-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ trace-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             else
-                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ trace-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ trace-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             fi
                                                                                            nix-collect-garbage
                                                                                        else
@@ -294,7 +295,8 @@
                                             links-directory ? "e036a7bd" ,
                                             locks-directory ? "4c3fa402" ,
                                             mounts-directory ? "cfef9d2a" ,
-                                            quarantine-directory ? "58c023ee"
+                                            quarantine-directory ? "58c023ee" ,
+                                            trace-directory ? "7ee7ce7b"
                                         } :
                                             pkgs.stdenv.mkDerivation
                                                 {
@@ -315,6 +317,7 @@
                                                                                         locks-directory = locks-directory ;
                                                                                         mounts-directory = mounts-directory ;
                                                                                         quarantine-directory = quarantine-directory ;
+                                                                                        trace-directory = trace-directory ;
                                                                                     }
                                                                             ) ;
                                                                     in
