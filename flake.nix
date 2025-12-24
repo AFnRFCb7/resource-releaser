@@ -11,9 +11,8 @@
                         let
                             implementation =
                                 {
-                                    channel ,
+                                    channel ? "redis" ,
                                     gc-roots-directory ,
-                                    links-directory ,
                                     locks-directory ,
                                     mounts-directory ,
                                     quarantine-directory
@@ -291,7 +290,6 @@
                                             channel ? "c8807213" ,
                                             expected ? "24a5ba9c" ,
                                             gc-roots-directory ? "8584bd77" ,
-                                            links-directory ? "e036a7bd" ,
                                             locks-directory ? "4c3fa402" ,
                                             mounts-directory ? "cfef9d2a" ,
                                             quarantine-directory ? "58c023ee"
@@ -311,7 +309,6 @@
                                                                                     {
                                                                                         channel = channel ;
                                                                                         gc-roots-directory = gc-roots-directory ;
-                                                                                        links-directory = links-directory ;
                                                                                         locks-directory = locks-directory ;
                                                                                         mounts-directory = mounts-directory ;
                                                                                         quarantine-directory = quarantine-directory ;
