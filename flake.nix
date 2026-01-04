@@ -11,12 +11,21 @@
                         let
                             implementation =
                                 {
-                                    channel ? "redis" ,
+                                    channel ,
+                                    description ,
+                                    enable ,
                                     gc-roots-directory ,
                                     locks-directory ,
                                     mounts-directory ,
-                                    quarantine-directory
+                                    quarantine-directory ,
+                                    user
                                 } :
+                                    {
+                                        service =
+                                            {
+
+                                            } ;
+                                    } ;
                                     let
                                         application =
                                             pkgs.writeShellApplication
