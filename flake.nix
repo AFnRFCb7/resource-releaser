@@ -310,7 +310,7 @@
                                             locks-directory ? "4c3fa402" ,
                                             mounts-directory ? "cfef9d2a" ,
                                             quarantine-directory ? "58c023ee"
-                                        } :resource-releaser
+                                        } :
                                             pkgs.stdenv.mkDerivation
                                                 {
                                                     installPhase = ''execute-test "$out"'' ;
