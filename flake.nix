@@ -135,7 +135,7 @@
                                                                                                    ;;
                                                                                                --release)
                                                                                                    RELEASE="$2"
-                                                                                                    echo "f5d98c5d RELEASE=$RELEASE"
+                                                                                                    echo "f5d98c5d ORIGINATOR_PID=$ORIGINATOR_PID RELEASE=$RELEASE"
                                                                                                    shift 2
                                                                                                    ;;
                                                                                                --resolution)
@@ -147,6 +147,7 @@
                                                                                                    ;;
                                                                                            esac
                                                                                        done
+                                                                                       echo 786feb3b "ORIGINATOR_PID=$ORIGINATOR_PID" "RELEASE=$RELEASE"
                                                                                        export ORIGINATOR_PID
                                                                                        if [[ -n "$ORIGINATOR_PID" ]]
                                                                                        then
