@@ -135,6 +135,7 @@
                                                                                                    ;;
                                                                                                --release)
                                                                                                    RELEASE="$2"
+                                                                                                    echo "f5d98c5d RELEASE=$RELEASE"
                                                                                                    shift 2
                                                                                                    ;;
                                                                                                --resolution)
@@ -181,7 +182,7 @@
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
                                                                                             TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
-                                                                                            echo "RELEASE=$RELEASE"
+                                                                                            echo "0c88053d RELEASE=$RELEASE"
                                                                                             echo "STANDARD_OUTPUT_FILE=$STANDARD_OUTPUT_FILE"
                                                                                             cat "$STANDARD_OUTPUT_FILE"
                                                                                             echo "${ quarantine-directory }"
