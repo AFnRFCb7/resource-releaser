@@ -190,7 +190,7 @@
                                                                                             ls -lah "${ quarantine-directory }"
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                            nix-collect-garbage
+                                                                                            # nix-collect-garbage
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
