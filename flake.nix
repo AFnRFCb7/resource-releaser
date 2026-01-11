@@ -182,6 +182,8 @@
                                                                                        then
                                                                                             TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
                                                                                             echo "RELEASE=$RELEASE"
+                                                                                            echo "STANDARD_OUTPUT_FILE="$STANDARD_OUTPUT_FILE"
+                                                                                            cat "$STANDARD_OUTPUT_FILE"
                                                                                             echo "${ quarantine-directory }"
                                                                                             ls -lah "${ quarantine-directory }"
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
