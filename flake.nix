@@ -181,7 +181,8 @@
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
                                                                                             TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
-                                                                                            ls -lah "${ mounts-directory }
+                                                                                            echo "${ mounts-directory }"
+                                                                                            ls -lah "${ mounts-directory }"
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             nix-collect-garbage
