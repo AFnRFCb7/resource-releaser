@@ -260,6 +260,7 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
+                                                                            yq eval --prettyPrint ".description.secondary.seed" <<< "$PAYLOAD"
                                                                             echo iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }"
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
