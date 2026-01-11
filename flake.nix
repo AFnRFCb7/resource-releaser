@@ -194,6 +194,7 @@
                                                                                             # nix-collect-garbage
                                                                                             JSON="$( jq --null-input --arg HASH "$HASH" --arg INDEX "$INDEX" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg TYPE release '{ "hash" : $HASH , "INDEX" : $INDEX , "standard-output" : $STANDARD_OUTPUT , "type" : $TYPE }' )" || failure 201f8f4f
                                                                                             redis-cli PUBLISH ${ channel } "$JSON" > /dev/null
+                                                                                            echo cbe13428
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
