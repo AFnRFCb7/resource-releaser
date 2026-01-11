@@ -11,7 +11,7 @@
                         let
                             implementation =
                                 {
-                                    channel ? "redis" ,
+                                    channel ,
                                     gc-roots-directory ,
                                     locks-directory ,
                                     mounts-directory ,
