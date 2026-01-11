@@ -180,6 +180,7 @@
                                                                                        else
                                                                                            STATUS=0
                                                                                        fi
+                                                                                       STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
                                                                                             TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
@@ -191,12 +192,13 @@
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             # nix-collect-garbage
+                                                                                            JSON="$( jq --null-input --arg HASH "$HASH" --arg INDEX "$INDEX" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg TYPE release '{ "hash" : $HASH , "INDEX" : $INDEX , "standard-output" : $STANDARD_OUTPUT , "type" : $TYPE }' )" || failure 201f8f4f
+                                                                                            redis-cli PUBLISH ${ channel } "$JSON" > /dev/null
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
                                                                                            RELEASE_RESOLUTIONS_JSON="[${ builtins.concatStringsSep "" [ "$" "{" "RELEASE_RESOLUTIONS_JSON_1%," "}" ] }]"
                                                                                            STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
-                                                                                           STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
                                                                                            cat "$STANDARD_ERROR_FILE"
                                                                                            jq \
                                                                                                --null-input \
