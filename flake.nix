@@ -194,6 +194,7 @@
                                                                                             # nix-collect-garbage
                                                                                             JSON="$( jq --null-input --arg HASH "$HASH" --arg INDEX "$INDEX" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg TEMPORARY "$TEMPORARY" --arg TYPE release '{ "hash" : $HASH , "index" : $INDEX , "standard-output" : $STANDARD_OUTPUT , "temporary" : $TEMPORARY , "type" : $TYPE }' )" || failure 201f8f4f
                                                                                             echo "$JSON"
+                                                                                            echo 2e595e55 redis-cli PUBLISH ${ channel } "$JSON"
                                                                                             redis-cli PUBLISH ${ channel } "$JSON" > /dev/null
                                                                                             echo cbe13428
                                                                                        else
