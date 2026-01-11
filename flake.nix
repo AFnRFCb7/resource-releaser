@@ -185,19 +185,20 @@
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
                                                                                             TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
-                                                                                            echo "0c88053d RELEASE=$RELEASE"
-                                                                                            echo "STANDARD_OUTPUT_FILE=$STANDARD_OUTPUT_FILE"
-                                                                                            cat "$STANDARD_OUTPUT_FILE"
-                                                                                            echo "${ quarantine-directory }"
-                                                                                            ls -lah "${ quarantine-directory }"
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             # nix-collect-garbage
                                                                                             JSON="$( jq --null-input --arg HASH "$HASH" --arg INDEX "$INDEX" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg TEMPORARY "$TEMPORARY" --arg TYPE release '{ "hash" : $HASH , "index" : $INDEX , "standard-output" : $STANDARD_OUTPUT , "temporary" : $TEMPORARY , "type" : $TYPE }' )" || failure 201f8f4f
-                                                                                            echo "$JSON"
-                                                                                            echo 2e595e55 redis-cli PUBLISH ${ channel } "$JSON"
+                                                                                            if [[ -n "$RELEASE" ]]
+                                                                                            then
+                                                                                                echo b284abc5 "RELEASE=$RELEASE"
+                                                                                                echo 2e595e55 redis-cli PUBLISH ${ channel } "$JSON"
+                                                                                            fi
                                                                                             redis-cli PUBLISH ${ channel } "$JSON" > /dev/null
-                                                                                            echo cbe13428
+                                                                                            if [[ -n "$RELEASE" ]]
+                                                                                            then
+                                                                                                echo cbe13428
+                                                                                            fi
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
