@@ -58,7 +58,6 @@
                                                                                                                 name = "runScript" ;
                                                                                                                 text =
                                                                                                                     ''
-                                                                                                                        echo "RELEASE=$RELEASE"
                                                                                                                         $RELEASE
                                                                                                                     '' ;
                                                                                                             } ;
