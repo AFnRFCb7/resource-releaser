@@ -155,7 +155,7 @@
                                                                                                    ;;
                                                                                            esac
                                                                                        done
-                                                                                       echo 786feb3b "ORIGINATOR_PID=$ORIGINATOR_PID" "RELEASE=$RELEASE"
+                                                                                       echo 786feb3b "ORIGINATOR_PID=$ORIGINATOR_PID" "CALLER_PID=$CALLER_PID" "RELEASE=$RELEASE"
                                                                                        export ORIGINATOR_PID
                                                                                        export CALLER_PID
                                                                                        if [[ -n "$ORIGINATOR_PID" ]]
