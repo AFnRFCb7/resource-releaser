@@ -117,6 +117,7 @@
                                                                                         in "${ application }/bin/resolve" ;
                                                                                 in
                                                                                     ''
+                                                                                        CALLER_PID=
                                                                                        INDEX=
                                                                                        HASH=
                                                                                        ORIGINATOR_PID=
@@ -128,6 +129,10 @@
                                                                                                    INDEX="$2"
                                                                                                    shift 2
                                                                                                    ;;
+                                                                                               --caller-pid)
+                                                                                                    CALLER_PID="$2"
+                                                                                                    shift 2
+                                                                                                    ;;
                                                                                                --hash)
                                                                                                    HASH="$2"
                                                                                                    shift 2
@@ -152,6 +157,7 @@
                                                                                        done
                                                                                        echo 786feb3b "ORIGINATOR_PID=$ORIGINATOR_PID" "RELEASE=$RELEASE"
                                                                                        export ORIGINATOR_PID
+                                                                                       export CALLER_PID
                                                                                        if [[ -n "$ORIGINATOR_PID" ]]
                                                                                        then
                                                                                            tail --follow /dev/null --pid "$ORIGINATOR_PID"
@@ -265,6 +271,7 @@
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
                                                                             ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
+                                                                            CALLER_PID="$( yq eval '."caller-pid" | tostring' - <<< "$PAYLOAD" )" || failure e36ff65e
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release // \"\" | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
                                                                             yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
@@ -273,8 +280,8 @@
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
                                                                             yq eval --prettyPrint ".description.secondary.seed" <<< "$PAYLOAD"
-                                                                            echo iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }"
-                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
+                                                                            echo iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --caller-pid "$CALLER_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }"
+                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --caller-pid "$CALLER_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
