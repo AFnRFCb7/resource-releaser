@@ -56,7 +56,11 @@
                                                                                                         pkgs.writeShellApplication
                                                                                                             {
                                                                                                                 name = "runScript" ;
-                                                                                                                text = "$RELEASE" ;
+                                                                                                                text =
+                                                                                                                    ''
+                                                                                                                        echo "RELEASE=$RELEASE"
+                                                                                                                        $RELEASE
+                                                                                                                    '' ;
                                                                                                             } ;
                                                                                                     in "${ application }/bin/runScript" ;
                                                                                         }
