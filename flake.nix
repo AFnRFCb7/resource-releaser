@@ -249,7 +249,7 @@
                                                                     then
                                                                         read -r PAYLOAD
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
-                                                                        echo a212c994
+                                                                        echo 7171bbad
                                                                         echo "TYPE=$TYPE_"
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
