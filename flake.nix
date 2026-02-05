@@ -227,10 +227,11 @@
                                                                                            chmod 0500 "${ quarantine-directory }/$INDEX/release.sh"
                                                                                            for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
                                                                                            do
+                                                                                                echo f22b20ae "RESOLUTION=$RESOLUTION"
                                                                                                envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
-                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE release '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
+                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE f71bbf5a --arg RESOLUTION 5752c6c2  '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , resolution : $RESOLUTION , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
