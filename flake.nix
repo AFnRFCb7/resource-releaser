@@ -186,6 +186,20 @@
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             nix-collect-garbage
+                                                                                            JSON="$( jq \
+                                                                                                --null-input \
+                                                                                                --compact-output \
+                                                                                                --arg HASH "$HASH" \
+                                                                                                --arg INDEX "$INDEX" \
+                                                                                                --arg ORIGINATOR_PID "$ORIGINATOR_PID" \
+                                                                                                '{
+                                                                                                   "hash" : $HASH ,
+                                                                                                   "index" : $INDEX ,
+                                                                                                   "originator-pid" : $ORIGINATOR_PID ,
+                                                                                                   "type" : "RELEASED"
+                                                                                                }'
+                                                                                            )" || failure 1153aaf9
+                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX/release"
                                                                                            RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
@@ -228,6 +242,9 @@
                                                                                                envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
+                                                                                           JSON="$(
+                                                                                           )" || failure 441ff4b1
+                                                                                           redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
                                                                                     '' ;
