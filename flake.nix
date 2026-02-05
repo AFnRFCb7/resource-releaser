@@ -230,7 +230,7 @@
                                                                                                envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
-                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" '{ "hash" : $HASH , "index" : $INDEX , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
+                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE release '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
