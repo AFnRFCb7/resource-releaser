@@ -230,7 +230,7 @@
                                                                                                envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
-                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" '{ "hash" : $HASH , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
+                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" '{ "hash" : $HASH , "index" : $INDEX , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
@@ -276,7 +276,7 @@
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
-                                                                            done <<< "$( yq eval '.resolutions.release // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
+                                                                            done <<< "$( yq eval '.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
                                                                             echo 9f86e06e
                                                                             echo "$PAYLOAD"
                                                                             echo db5216e4 iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
