@@ -264,7 +264,7 @@
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
-                                                                        elif [[ "resolve-init" == "$TYPE_" ]]
+                                                                        elif [[ "RELEASE_FAILURE" == "$TYPE_" ]]
                                                                         then
                                                                             echo 2531b3c6
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
