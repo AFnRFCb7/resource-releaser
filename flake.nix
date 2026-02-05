@@ -196,7 +196,7 @@
                                                                                                    "hash" : $HASH ,
                                                                                                    "index" : $INDEX ,
                                                                                                    "originator-pid" : $ORIGINATOR_PID ,
-                                                                                                   "type" : "RELEASED"
+                                                                                                   "type" : "RELEASE-SUCCESS"
                                                                                                 }'
                                                                                             )" || failure 1153aaf9
                                                                                             redis-cli PUBLISH ${ channel } "$JSON"
@@ -243,6 +243,17 @@
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
                                                                                            JSON="$(
+                                                                                            jq
+                                                                                                --null-input \
+                                                                                                --compact-output \
+                                                                                                --arg HASH "$HASH" \
+                                                                                                --arg INDEX "$INDEX" \
+                                                                                                '{
+                                                                                                    "hash" : $HASH ,
+                                                                                                    "index" : $INDEX ,
+                                                                                                    "originator-pid" : $ORIGINATOR_PID ,
+                                                                                                    "type" : "RELEASE-FAILURE"
+                                                                                                }'
                                                                                            )" || failure 441ff4b1
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
