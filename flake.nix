@@ -185,7 +185,7 @@
                                                                                             mkdir --parents "${ gc-roots-directory }/$INDEX"
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                            nix-collect-garbage
+                                                                                            # nix-collect-garbage
                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" '{ "hash" : $HASH , type : "RELEASE_SUCCESS" }' )" || failure 215bca0e
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
