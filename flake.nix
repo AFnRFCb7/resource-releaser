@@ -270,7 +270,7 @@
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
-                                                                            done <<< "$( yq eval '.release-resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
+                                                                            done <<< "$( yq eval '.resolutions.release // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
                                                                             iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
                                                                         elif [[ "resolve-release" == "$TYPE_" ]]
                                                                         then
