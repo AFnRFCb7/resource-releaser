@@ -249,6 +249,8 @@
                                                                     then
                                                                         read -r PAYLOAD
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
+                                                                        echo a212c994
+                                                                        echo "TYPE=$TYPE_"
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
@@ -264,6 +266,7 @@
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
+                                                                            echo 2531b3c6
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
                                                                             RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
                                                                             RESOLUTIONS=()
