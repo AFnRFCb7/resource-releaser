@@ -267,10 +267,14 @@
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
                                                                             RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
                                                                             RESOLUTIONS=()
+                                                                            echo 0b712d5c
+                                                                            echo "$PAYLOAD"
+                                                                            echo ce6db7e2
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$( yq eval '.resolutions.release // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
+                                                                            echo db5216e4
                                                                             iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
                                                                         elif [[ "resolve-release" == "$TYPE_" ]]
                                                                         then
