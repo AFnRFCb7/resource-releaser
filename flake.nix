@@ -277,6 +277,8 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$( yq eval '.resolutions.release // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
+                                                                            echo 9f86e06e
+                                                                            echo "$PAYLOAD"
                                                                             echo db5216e4 iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
                                                                             iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
                                                                         elif [[ "resolve-release" == "$TYPE_" ]]
