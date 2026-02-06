@@ -187,58 +187,16 @@
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             # nix-collect-garbage
-                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" '{ "hash" : $HASH , type : "RELEASE_SUCCESS" }' )" || failure 215bca0e
-                                                                                           redis-cli PUBLISH ${ channel } "$JSON"
+                                                                                            TYPE="success"
+                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg type "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
+                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
-                                                                                           mkdir --parents "${ quarantine-directory }/$INDEX/release"
-                                                                                           RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
-                                                                                           RELEASE_RESOLUTIONS_JSON="[${ builtins.concatStringsSep "" [ "$" "{" "RELEASE_RESOLUTIONS_JSON_1%," "}" ] }]"
-                                                                                           STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
-                                                                                           STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
-                                                                                           cat "$STANDARD_ERROR_FILE"
-                                                                                           jq \
-                                                                                               --null-input \
-                                                                                               --arg HASH "$HASH" \
-                                                                                               --arg INDEX "$INDEX" \
-                                                                                               --arg ORIGINATOR_PID "$ORIGINATOR_PID" \
-                                                                                               --arg RELEASE "$RELEASE" \
-                                                                                               --argjson RELEASE_RESOLUTIONS "$RELEASE_RESOLUTIONS_JSON" \
-                                                                                               --arg STANDARD_ERROR "$STANDARD_ERROR" \
-                                                                                               --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" \
-                                                                                               --arg STATUS "$STATUS" \
-                                                                                               '{
-                                                                                                   "hash" : $HASH ,
-                                                                                                   "index" : $INDEX ,
-                                                                                                   "originator-pid" : $ORIGINATOR_PID ,
-                                                                                                   "release" : $RELEASE ,
-                                                                                                   "release-resolutions" : $RELEASE_RESOLUTIONS ,
-                                                                                                   "standard-error" : $STANDARD_ERROR ,
-                                                                                                   "standard-output" : $STANDARD_OUTPUT ,
-                                                                                                   "status" : $STATUS
-                                                                                               }' | yq eval --prettyPrint '.' - > "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                           chmod 0400 "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                           export ARGUMENTS="\$ARGUMENTS"
-                                                                                           export ARGUMENTS_JSON="\$ARGUMENTS_JSON"
-                                                                                           export HAS_STANDARD_INPUT="\$HAS_STANDARD_INPUT"
-                                                                                           export JSON="\$JSON"
-                                                                                           export INDEX
-                                                                                           export STANDARD_INPUT="\$STANDARD_INPUT"
-                                                                                           export TYPE="resolve-release"
-                                                                                           MODE=false RESOLUTION=release envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release.sh"
-                                                                                           chmod 0500 "${ quarantine-directory }/$INDEX/release.sh"
-                                                                                           echo 6e69e616
-                                                                                           for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
-                                                                                           do
-                                                                                               echo f22b20ae "RESOLUTION=$RESOLUTION"
-                                                                                               envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
-                                                                                               chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
-                                                                                           done
-                                                                                           echo 98bb76b6
-                                                                                           echo "RELEASE=$RELEASE"
-                                                                                           echo "RESOLUTIONS=${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[*]" "}" ] }"
-                                                                                           echo 46f22df1
-                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE "$RELEASE" --arg RESOLUTION 5752c6c2  '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , resolution : $RESOLUTION , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
-                                                                                           redis-cli PUBLISH ${ channel } "$JSON"
+                                                                                            RESOLUTIONS_JSON="$( printf '%s\n' "${ builtins.toString "" [ "$" "{" "RESOLUTIONS[@]" "}" ] } )" || failure 0845df66
+                                                                                            STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
+                                                                                            STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
+                                                                                            TYPE="invalid-release"
+                                                                                            JSON="$( jq --null-input --compact-output --arg HASH $HASH" --arg INDEX "$INDEX" --argjson RESOLUTIONS $RESOLUTIONS --arg STANDARD_ERROR "$STANDARD_ERROR" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg STATUS "$STATUS" --arg type "$TYPE" '{ "hash" : $HASH , "index" : $INDEX , "resolutions" : $RESOLUTIONS , "standard-error" : $STANDARD_ERROR , "standard-output" : $STANDARD_OUTPUT , "status" : $STATUS,  "type" : $TYPE }' )" || failure 33501603
+                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
                                                                                     '' ;
