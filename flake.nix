@@ -225,9 +225,10 @@
                                                                                            export TYPE="resolve-release"
                                                                                            MODE=false RESOLUTION=release envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release.sh"
                                                                                            chmod 0500 "${ quarantine-directory }/$INDEX/release.sh"
+                                                                                           echo 6e69e616
                                                                                            for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
                                                                                            do
-                                                                                                echo f22b20ae "RESOLUTION=$RESOLUTION"
+                                                                                               echo f22b20ae "RESOLUTION=$RESOLUTION"
                                                                                                envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
@@ -271,7 +272,7 @@
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
                                                                             RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
                                                                             RESOLUTIONS=()
-                                                                            echo 0b712d5c
+                                                                            echo ac5c2652
                                                                             echo "$PAYLOAD"
                                                                             echo ce6db7e2
                                                                             while IFS= read -r RESOLUTION
