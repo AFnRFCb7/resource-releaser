@@ -268,7 +268,7 @@
                                                                             done
                                                                             echo b95e68c5
                                                                             echo "$PAYLOAD"
-                                                                            yq eval '.description.secondary.seed.resolutions.init // [] | .[]
+                                                                            yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD"
                                                                             echo 01e9f090 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "RELEASE_FAILURE" == "$TYPE_" ]]
