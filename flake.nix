@@ -190,6 +190,14 @@
                                                                                             JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg type "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
                                                                                             redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
+                                                                                            mapfile -t RESOLUTIONS < <(
+                                                                                                yq -r '.resolutions // [] | .[]' < "${ quarantine-directory }/$INDEX/
+                                                                                            )
+                                                                                            RESOLUTION_ARGS=()
+                                                                                            for r in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
+                                                                                            do
+                                                                                                RESOLUTION_ARGS+=( --resolution "$r" )
+                                                                                            done
                                                                                             RESOLUTIONS_JSON="$( printf '%s\n' "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] } )" || failure 0845df66
                                                                                             STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
                                                                                             STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
@@ -208,15 +216,16 @@
                                                             do
                                                                 if [[ "$TYPE" == "message" ]]
                                                                 then
-                                                                    read -r CHANNEL
-                                                                    if [[ ${ channel } == "$CHANNEL" ]]
+                                                                    read -r TYPE || failure c67a60c1
+                                                                    read -r CHANNEL || failure deaeb31d
+                                                                    read -r PAYLOAD || failure 27fe0fb0
+                                                                    if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                     then
-                                                                        read -r PAYLOAD
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
-                                                                        echo 7171bbad
                                                                         echo "TYPE=$TYPE_"
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
+                                                                            echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
                                                                             ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
@@ -225,38 +234,27 @@
                                                                             RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
                                                                             while IFS= read -r RESOLUTION
                                                                             do
-                                                                                echo ba1ad784
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
-                                                                            echo b95e68c5
-                                                                            yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
-                                                                            echo
-                                                                            echo 08162619
-                                                                            echo b13b4eaa "RESOLUTIONS=${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }"
-                                                                            echo f3f477ea
-                                                                            echo 01e9f090 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
-                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
-                                                                        elif [[ "RELEASE_FAILURE" == "$TYPE_" ]]
+                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }"
+                                                                        elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
-                                                                            echo 2531b3c6
-                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
-                                                                            RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
+                                                                            echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
+                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 06facc70
+                                                                            HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 285dd0a4
+                                                                            RELEASE="$( yq eval ".release // \"\" | tostring" - <<< "$PAYLOAD" )" || failure 04e6e4c7
                                                                             RESOLUTIONS=()
-                                                                            echo ac5c2652
-                                                                            echo "$PAYLOAD"
-                                                                            echo ce6db7e2
+                                                                            RESOLUTIONS_YAML="$( yq eval '.release-resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 1feedc14
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
-                                                                            done <<< "$( yq eval '.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
-                                                                            echo 9f86e06e
-                                                                            echo "$PAYLOAD"
-                                                                            echo db5216e4 iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
-                                                                            iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
-                                                                        elif [[ "resolve-release" == "$TYPE_" ]]
+                                                                            done <<< "$RESOLUTIONS_YAML"
+                                                                            iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
+                                                                        elif [[ "resolve-release" == "$TYPE" ]]
                                                                         then
-                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 182712c3
-                                                                            iteration --index "$INDEX"
+                                                                            echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
+                                                                        else
+                                                                            failure 054c7474 "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                         fi
                                                                     fi
                                                                 fi
