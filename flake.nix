@@ -191,9 +191,6 @@
                                                                                             JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg type "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
                                                                                             redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
-                                                                                            mapfile -t RESOLUTIONS < <(
-                                                                                                yq -r '.resolutions // [] | .[]' < "${ quarantine-directory }/$INDEX/
-                                                                                            )
                                                                                             RESOLUTION_ARGS=()
                                                                                             for r in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
                                                                                             do
