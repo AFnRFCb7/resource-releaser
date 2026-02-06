@@ -265,11 +265,12 @@
                                                                             ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release // \"\" | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
-                                                                            yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
+                                                                            RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
+                                                                            while IFS= read -r RESOLUTION
                                                                             do
                                                                                 echo ba1ad784
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
-                                                                            done
+                                                                            done <<< "$RESOLUTIONS_YAML"
                                                                             echo b95e68c5
                                                                             yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
                                                                             echo
