@@ -138,6 +138,7 @@
                                                                                                    shift 2
                                                                                                    ;;
                                                                                                --resolution)
+                                                                                                    echo 3b8353fc "$2"
                                                                                                    RESOLUTIONS+=("$2")
                                                                                                    shift 2
                                                                                                    ;;
@@ -269,7 +270,8 @@
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
                                                                             echo b95e68c5
-                                                                            echo "$PAYLOAD"
+                                                                            yq eval --prettyPrint "." <<< "$PAYLOAD"
+                                                                            echo 08162619
                                                                             echo 01e9f090 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "RELEASE_FAILURE" == "$TYPE_" ]]
