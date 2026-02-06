@@ -232,6 +232,7 @@
                                                                                                envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                                chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
                                                                                            done
+                                                                                           echo 98bb76b6
                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE f71bbf5a --arg RESOLUTION 5752c6c2  '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , resolution : $RESOLUTION , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
@@ -265,6 +266,9 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
+                                                                            echo b95e68c5
+                                                                            echo "$PAYLOAD"
+                                                                            echo 01e9f090 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "RELEASE_FAILURE" == "$TYPE_" ]]
                                                                         then
