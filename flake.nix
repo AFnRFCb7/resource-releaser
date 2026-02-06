@@ -271,8 +271,11 @@
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
                                                                             echo b95e68c5
-                                                                            yq eval --prettyPrint ".description" <<< "$PAYLOAD"
+                                                                            yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
+                                                                            echo
                                                                             echo 08162619
+                                                                            echo b13b4eaa "RESOLUTIONS=${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }
+                                                                            echo f3f477ea
                                                                             echo 01e9f090 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "RELEASE_FAILURE" == "$TYPE_" ]]
