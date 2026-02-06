@@ -234,8 +234,9 @@
                                                                                            done
                                                                                            echo 98bb76b6
                                                                                            echo "RELEASE=$RELEASE"
+                                                                                           echo "RESOLUTIONS=${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[*]" "}" ] }"
                                                                                            echo 46f22df1
-                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE f71bbf5a --arg RESOLUTION 5752c6c2  '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , resolution : $RESOLUTION , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
+                                                                                           JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --arg RELEASE "$RELEASE" --arg RESOLUTION 5752c6c2  '{ "hash" : $HASH , "index" : $INDEX , release : $RELEASE , resolution : $RESOLUTION , type : "RELEASE_FAILURE" }' )" || failure e979e6dd
                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
