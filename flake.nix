@@ -252,9 +252,9 @@
                                                                             iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                         elif [[ "resolve-release" == "$TYPE" ]]
                                                                         then
-                                                                            echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
+                                                                            echo NO-ACTION "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                         else
-                                                                            failure 054c7474 "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
+                                                                            echo IGNORES "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                         fi
                                                                     fi
                                                                 fi
