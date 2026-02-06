@@ -267,10 +267,11 @@
                                                                             RESOLUTIONS=()
                                                                             yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
                                                                             do
+                                                                                echo ba1ad784
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done
                                                                             echo b95e68c5
-                                                                            yq eval --prettyPrint "." <<< "$PAYLOAD"
+                                                                            yq eval --prettyPrint ".description" <<< "$PAYLOAD"
                                                                             echo 08162619
                                                                             echo 01e9f090 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
