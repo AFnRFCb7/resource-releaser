@@ -143,7 +143,7 @@
                                                                                                    shift 2
                                                                                                    ;;
                                                                                                *)
-                                                                                                   failure 464417ef
+                                                                                                   failure 464417ef "$*"
                                                                                                    ;;
                                                                                            esac
                                                                                        done
