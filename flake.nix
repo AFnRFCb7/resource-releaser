@@ -235,6 +235,7 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
+                                                                            # shellcheck disable=SC2068
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
@@ -248,6 +249,7 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
+                                                                            # shellcheck disable=SC2068
                                                                             iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-release" == "$TYPE" ]]
                                                                         then
