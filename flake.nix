@@ -212,11 +212,11 @@
                                                         ''
                                                             redis-cli SUBSCRIBE ${ channel } | while true
                                                             do
+                                                                read -r TYPE || failure c67a60c1
+                                                                read -r CHANNEL || failure deaeb31d
+                                                                read -r PAYLOAD || failure 27fe0fb0
                                                                 if [[ "$TYPE" == "message" ]]
                                                                 then
-                                                                    read -r TYPE || failure c67a60c1
-                                                                    read -r CHANNEL || failure deaeb31d
-                                                                    read -r PAYLOAD || failure 27fe0fb0
                                                                     if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                     then
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
