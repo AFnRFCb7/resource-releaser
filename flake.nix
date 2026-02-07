@@ -119,7 +119,6 @@
                                                                                        ORIGINATOR_PID=
                                                                                        RELEASE=
                                                                                        RESOLUTIONS=()
-                                                                                       echo "$*"
                                                                                        while [[ "$#" -gt 0 ]]
                                                                                        do
                                                                                            case "$1" in
@@ -188,8 +187,10 @@
                                                                                             tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
                                                                                             # nix-collect-garbage
-                                                                                            TYPE="success"
+                                                                                            export TYPE="success"
+                                                                                            echo e2c7266d
                                                                                             JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg type "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
+                                                                                            echo 84ddb5ef
                                                                                             redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
                                                                                             RESOLUTION_ARGS=()
