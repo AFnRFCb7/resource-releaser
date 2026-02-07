@@ -86,7 +86,6 @@
                                                                                                             export HAS_STANDARD_INPUT
                                                                                                             export STANDARD_INPUT
                                                                                                             export RELEASE
-                                                                                                            echo d08f9333 "ARGUMENTS_JSON=$ARGUMENTS_JSON"
                                                                                                             JSON="$(
                                                                                                                 jq \
                                                                                                                     --null-input \
