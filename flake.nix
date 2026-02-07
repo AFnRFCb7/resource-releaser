@@ -210,7 +210,7 @@
                                                         ] ;
                                                     text =
                                                         ''
-                                                            redis-cli SUBSCRIBE ${ channel } | while read -r TYPE
+                                                            redis-cli SUBSCRIBE ${ channel } | while true
                                                             do
                                                                 if [[ "$TYPE" == "message" ]]
                                                                 then
