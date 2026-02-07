@@ -119,6 +119,7 @@
                                                                                        ORIGINATOR_PID=
                                                                                        RELEASE=
                                                                                        RESOLUTIONS=()
+                                                                                       echo "$*"
                                                                                        while [[ "$#" -gt 0 ]]
                                                                                        do
                                                                                            case "$1" in
