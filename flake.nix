@@ -189,7 +189,7 @@
                                                                                             # nix-collect-garbage
                                                                                             export TYPE="success"
                                                                                             echo e2c7266d
-                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg type "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
+                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg TYPE "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
                                                                                             echo 84ddb5ef
                                                                                             redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
