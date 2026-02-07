@@ -235,7 +235,7 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
-                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }"
+                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
                                                                             echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
@@ -248,7 +248,7 @@
                                                                             do
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
-                                                                            iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
+                                                                            iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-release" == "$TYPE" ]]
                                                                         then
                                                                             echo NO-ACTION "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
