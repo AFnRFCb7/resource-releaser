@@ -226,6 +226,7 @@
                                                                         echo "TYPE=$TYPE_"
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
+                                                                            echo 0cff7ed4 "$*"
                                                                             echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
@@ -235,9 +236,11 @@
                                                                             RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
                                                                             while IFS= read -r RESOLUTION
                                                                             do
+                                                                                echo cdc22929 "RESOLUTION=$RESOLUTION"
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
                                                                             # shellcheck disable=SC2068
+                                                                            echo 1e5e2a62 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
@@ -249,6 +252,7 @@
                                                                             RESOLUTIONS_YAML="$( yq eval '.release-resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 1feedc14
                                                                             while IFS= read -r RESOLUTION
                                                                             do
+                                                                                echo d8ffabbe "RESOLUTION=$RESOLUTION"
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
                                                                             # shellcheck disable=SC2068
