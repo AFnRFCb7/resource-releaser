@@ -197,7 +197,7 @@
                                                                                             do
                                                                                                 RESOLUTION_ARGS+=( --resolution "$r" )
                                                                                             done
-                                                                                            RESOLUTIONS_JSON="$( printf '%s\n' "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS_ARGS[@]" "}" ] }" | jq -R . | jq -r . )" || failure 0845df66
+                                                                                            RESOLUTIONS_JSON="$( printf '%s\n' "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION_ARGS[@]" "}" ] }" | jq -R . | jq -r . )" || failure 0845df66
                                                                                             STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
                                                                                             STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
                                                                                             TYPE="invalid-release"
