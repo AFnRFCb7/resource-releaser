@@ -114,6 +114,7 @@
                                                                                         in "${ application }/bin/resolve" ;
                                                                                 in
                                                                                     ''
+                                                                                        echo ab9370f3 "$*"
                                                                                        INDEX=
                                                                                        HASH=
                                                                                        ORIGINATOR_PID=
