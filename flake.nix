@@ -236,7 +236,7 @@
                                                                             echo 4efdb192
                                                                             yq eval '.description.secondary.seed.resolutions.release' <<< "$PAYLOAD"
                                                                             echo 2dd14a40
-                                                                            RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
+                                                                            RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions.release // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
                                                                             while IFS= read -r RESOLUTION
                                                                             do
                                                                                 echo cdc22929 "RESOLUTION=$RESOLUTION"
