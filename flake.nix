@@ -233,6 +233,9 @@
                                                                             ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release // \"\" | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
+                                                                            echo 4efdb192
+                                                                            yq eval '.description.secondary.seed.resolutions' <<< "$PAYLOAD"
+                                                                            echo 2dd14a40
                                                                             RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
                                                                             while IFS= read -r RESOLUTION
                                                                             do
@@ -241,6 +244,7 @@
                                                                             done <<< "$RESOLUTIONS_YAML"
                                                                             # shellcheck disable=SC2068
                                                                             echo 1e5e2a62 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
+                                                                            # shellcheck disable=SC2068
                                                                             iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
