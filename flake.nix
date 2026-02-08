@@ -197,7 +197,8 @@
                                                                                             STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
                                                                                             export TYPE="invalid-release"
                                                                                             echo a0899cd8 "RESOLUTIONS_JSON=$RESOLUTIONS_JSON"
-                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --argjson RESOLUTIONS "$RESOLUTIONS_JSON" --arg STANDARD_ERROR "$STANDARD_ERROR" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg STATUS "$STATUS" --arg type "$TYPE" '{ "hash" : $HASH , "index" : $INDEX , "resolutions" : $RESOLUTIONS , "standard-error" : $STANDARD_ERROR , "standard-output" : $STANDARD_OUTPUT , "status" : $STATUS,  "type" : $TYPE }' )" || failure 33501603
+                                                                                            echo "0=$0"
+                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --argjson RESOLUTIONS "$RESOLUTIONS_JSON" --arg STANDARD_ERROR "$STANDARD_ERROR" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg STATUS "$STATUS" --arg TYPE "$TYPE" '{ "hash" : $HASH , "index" : $INDEX , "resolutions" : $RESOLUTIONS , "standard-error" : $STANDARD_ERROR , "standard-output" : $STANDARD_OUTPUT , "status" : $STATUS,  "type" : $TYPE }' )" || failure 33501603
                                                                                             echo 4c39c788
                                                                                             redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
