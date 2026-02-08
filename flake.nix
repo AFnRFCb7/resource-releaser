@@ -243,9 +243,9 @@
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
                                                                             done <<< "$RESOLUTIONS_YAML"
                                                                             # shellcheck disable=SC2068
-                                                                            echo 1e5e2a62 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
+                                                                            echo 1e5e2a62 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] } &
                                                                             # shellcheck disable=SC2068
-                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
+                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] } &
                                                                         elif [[ "resolve-init" == "$TYPE_" ]]
                                                                         then
                                                                             echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
