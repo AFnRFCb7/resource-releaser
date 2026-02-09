@@ -265,6 +265,7 @@
                                                                             # shellcheck disable=SC2068
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 1b20a908
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 0467b530
+                                                                            # shellcheck disable=SC2068
                                                                             iteration --hash "$HASH" --index "$INDEX" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         else
                                                                             echo IGNORES "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
