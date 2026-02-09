@@ -260,11 +260,13 @@
                                                                             echo 5615c2c2 iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                             # shellcheck disable=SC2068
                                                                             iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
-                                                                        elif [[ "resolve-release" == "$TYPE" ]]
+                                                                        elif [[ "resolve-release" == "$TYPE_" ]]
                                                                         then
                                                                             # shellcheck disable=SC2068
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 1b20a908
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 0467b530
+                                                                            # shellcheck disable=SC2068
+                                                                            echo 8fc778d9 iteration --hash "$HASH" --index "$INDEX" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }
                                                                             # shellcheck disable=SC2068
                                                                             iteration --hash "$HASH" --index "$INDEX" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         else
