@@ -262,7 +262,10 @@
                                                                             iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-release" == "$TYPE" ]]
                                                                         then
-                                                                            echo NO-ACTION "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
+                                                                            # shellcheck disable=SC2068
+                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 1b20a908
+                                                                            HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 0467b530
+                                                                            iteration --hash "$HASH" --index "$INDEX" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         else
                                                                             echo IGNORES "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                         fi
