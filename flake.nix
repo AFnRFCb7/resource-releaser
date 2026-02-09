@@ -114,10 +114,12 @@
                                                                                         in "${ application }/bin/resolve" ;
                                                                                 in
                                                                                     ''
+                                                                                        echo ab9370f3 "$*"
                                                                                        INDEX=
                                                                                        HASH=
                                                                                        ORIGINATOR_PID=
                                                                                        RELEASE=
+                                                                                       RESOLUTIONS=()
                                                                                        while [[ "$#" -gt 0 ]]
                                                                                        do
                                                                                            case "$1" in
@@ -142,7 +144,7 @@
                                                                                                    shift 2
                                                                                                    ;;
                                                                                                *)
-                                                                                                   failure 464417ef
+                                                                                                   failure 464417ef "$*"
                                                                                                    ;;
                                                                                            esac
                                                                                        done
@@ -180,58 +182,26 @@
                                                                                        fi
                                                                                        if [[ 0 == "$STATUS" ]] && [[ -n "$STANDARD_ERROR_FILE" ]]
                                                                                        then
-                                                                                           TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
-                                                                                           if [[ -d "${ quarantine-directory }/$INDEX" ]]
-                                                                                           then
-                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                            else
-                                                                                                tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                                rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
-                                                                                            fi
-                                                                                           nix-collect-garbage
+                                                                                            TEMPORARY="$( mktemp --suffix .xz.tar )" || failure 1e7a248a
+                                                                                            mkdir --parents "${ quarantine-directory }/$INDEX"
+                                                                                            mkdir --parents "${ gc-roots-directory }/$INDEX"
+                                                                                            tar --create --file "$TEMPORARY" --xz "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                            rm --recursive --force "${ locks-directory }/$INDEX" "${ mounts-directory }/$INDEX" "${ quarantine-directory }/$INDEX" "${ gc-roots-directory }/$INDEX"
+                                                                                            # nix-collect-garbage
+                                                                                            export TYPE="success"
+                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg TYPE "$TYPE" '{ "hash" : $HASH , type : $TYPE }' )" || failure 215bca0e
+                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        else
-                                                                                           mkdir --parents "${ quarantine-directory }/$INDEX/release"
-                                                                                           RELEASE_RESOLUTIONS_JSON_1="$( printf '"%s",'  "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[*]" "}" ] }" )" || failure 456dd0ed
-                                                                                           RELEASE_RESOLUTIONS_JSON="[${ builtins.concatStringsSep "" [ "$" "{" "RELEASE_RESOLUTIONS_JSON_1%," "}" ] }]"
-                                                                                           STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
-                                                                                           STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
-                                                                                           cat "$STANDARD_ERROR_FILE"
-                                                                                           jq \
-                                                                                               --null-input \
-                                                                                               --arg HASH "$HASH" \
-                                                                                               --arg INDEX "$INDEX" \
-                                                                                               --arg ORIGINATOR_PID "$ORIGINATOR_PID" \
-                                                                                               --arg RELEASE "$RELEASE" \
-                                                                                               --argjson RELEASE_RESOLUTIONS "$RELEASE_RESOLUTIONS_JSON" \
-                                                                                               --arg STANDARD_ERROR "$STANDARD_ERROR" \
-                                                                                               --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" \
-                                                                                               --arg STATUS "$STATUS" \
-                                                                                               '{
-                                                                                                   "hash" : $HASH ,
-                                                                                                   "index" : $INDEX ,
-                                                                                                   "originator-pid" : $ORIGINATOR_PID ,
-                                                                                                   "release" : $RELEASE ,
-                                                                                                   "release-resolutions" : $RELEASE_RESOLUTIONS ,
-                                                                                                   "standard-error" : $STANDARD_ERROR ,
-                                                                                                   "standard-output" : $STANDARD_OUTPUT ,
-                                                                                                   "status" : $STATUS
-                                                                                               }' | yq eval --prettyPrint '.' - > "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                           chmod 0400 "${ quarantine-directory }/$INDEX/release.yaml"
-                                                                                           export ARGUMENTS="\$ARGUMENTS"
-                                                                                           export ARGUMENTS_JSON="\$ARGUMENTS_JSON"
-                                                                                           export HAS_STANDARD_INPUT="\$HAS_STANDARD_INPUT"
-                                                                                           export JSON="\$JSON"
-                                                                                           export INDEX
-                                                                                           export STANDARD_INPUT="\$STANDARD_INPUT"
-                                                                                           export TYPE="resolve-release"
-                                                                                           MODE=false RESOLUTION=release envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release.sh"
-                                                                                           chmod 0500 "${ quarantine-directory }/$INDEX/release.sh"
-                                                                                           for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
-                                                                                           do
-                                                                                               envsubst < ${ resolve } > "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
-                                                                                               chmod 0500 "${ quarantine-directory }/$INDEX/release/$RESOLUTION"
-                                                                                           done
+                                                                                            RESOLUTIONS_JSON="$( printf '%s\n' "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" | jq -R -s -c 'split("\n") | map(select(length>0))' )" || failure 0845df66
+                                                                                            STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure be48c573
+                                                                                            STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure 83137e6b
+                                                                                            export TYPE="invalid-release"
+                                                                                            echo a0899cd8 "RESOLUTIONS_JSON=$RESOLUTIONS_JSON"
+                                                                                            echo "0=$0"
+                                                                                            echo "0=$0"
+                                                                                            JSON="$( jq --null-input --compact-output --arg HASH "$HASH" --arg INDEX "$INDEX" --argjson RESOLUTIONS "$RESOLUTIONS_JSON" --arg STANDARD_ERROR "$STANDARD_ERROR" --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" --arg STATUS "$STATUS" --arg TYPE "$TYPE" '{ "hash" : $HASH , "index" : $INDEX , "resolutions" : $RESOLUTIONS , "standard-error" : $STANDARD_ERROR , "standard-output" : $STANDARD_OUTPUT , "status" : $STATUS,  "type" : $TYPE }' )" || failure 33501603
+                                                                                            echo 4c39c788
+                                                                                            redis-cli PUBLISH ${ channel } "$JSON"
                                                                                        fi
                                                                                        rm "$STANDARD_OUTPUT_FILE" "$STANDARD_ERROR_FILE"
                                                                                     '' ;
@@ -240,42 +210,67 @@
                                                         ] ;
                                                     text =
                                                         ''
-                                                            redis-cli SUBSCRIBE ${ channel } | while read -r TYPE
+                                                            redis-cli SUBSCRIBE ${ channel } | while true
                                                             do
+                                                                read -r TYPE || failure c67a60c1
+                                                                read -r CHANNEL || failure deaeb31d
+                                                                read -r PAYLOAD || failure 27fe0fb0
                                                                 if [[ "$TYPE" == "message" ]]
                                                                 then
-                                                                    read -r CHANNEL
-                                                                    if [[ ${ channel } == "$CHANNEL" ]]
+                                                                    if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                     then
-                                                                        read -r PAYLOAD
                                                                         TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
+                                                                        echo "TYPE=$TYPE_"
                                                                         if [[ "valid" == "$TYPE_" ]]
                                                                         then
+                                                                            echo 0cff7ed4 "$*"
+                                                                            echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                             INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure d79eee6f
                                                                             HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 7753e2d6
                                                                             ORIGINATOR_PID="$( yq eval '."originator-pid" | tostring' - <<< "$PAYLOAD" )" || failure de9dd0f2
                                                                             RELEASE="$( yq eval ".description.secondary.seed.release // \"\" | tostring" - <<< "$PAYLOAD" )" || failure 784a6c15
                                                                             RESOLUTIONS=()
-                                                                            yq eval --prettyPrint ".description.secondary.seed.resolutions" <<< "$PAYLOAD"
-                                                                            yq eval '.description.secondary.seed.resolutions.init // [] | .[]' - <<< "$PAYLOAD" | while IFS= read -r RESOLUTION
-                                                                            do
-                                                                                RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
-                                                                            done
-                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }" &
-                                                                        elif [[ "resolve-init" == "$TYPE_" ]]
-                                                                        then
-                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure f3c64901
-                                                                            RELEASE="$( yq eval ".release" - <<< "$PAYLOAD" )" || failure 3ae6bdb4
-                                                                            RESOLUTIONS=()
+                                                                            echo 4efdb192
+                                                                            yq eval '.description.secondary.seed.resolutions.release' <<< "$PAYLOAD"
+                                                                            echo 2dd14a40
+                                                                            RESOLUTIONS_YAML="$( yq eval '.description.secondary.seed.resolutions.release // [] | .[]' - <<< "$PAYLOAD" )" || failure 668130cd
                                                                             while IFS= read -r RESOLUTION
                                                                             do
+                                                                                echo cdc22929 "RESOLUTION=$RESOLUTION"
                                                                                 RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
-                                                                            done <<< "$( yq eval '.release-resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 0075bf74
-                                                                            iteration --index "$INDEX" --release "$RELEASE" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }" &
+                                                                            done <<< "$RESOLUTIONS_YAML"
+                                                                            # shellcheck disable=SC2068
+                                                                            echo 1e5e2a62 iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] } &
+                                                                            # shellcheck disable=SC2068
+                                                                            iteration --hash "$HASH" --index "$INDEX" --originator-pid "$ORIGINATOR_PID" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] } &
+                                                                        elif [[ "resolve-init" == "$TYPE_" ]]
+                                                                        then
+                                                                            echo "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
+                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 06facc70
+                                                                            HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 285dd0a4
+                                                                            RELEASE="$( yq eval ".release // \"\" | tostring" - <<< "$PAYLOAD" )" || failure 04e6e4c7
+                                                                            RESOLUTIONS=()
+                                                                            RESOLUTIONS_YAML="$( yq eval '.release-resolutions // [] | .[]' - <<< "$PAYLOAD" )" || failure 1feedc14
+                                                                            while IFS= read -r RESOLUTION
+                                                                            do
+                                                                                echo d8ffabbe "RESOLUTION=$RESOLUTION"
+                                                                                RESOLUTIONS+=( "--resolution" "$RESOLUTION" )
+                                                                            done <<< "$RESOLUTIONS_YAML"
+                                                                            # shellcheck disable=SC2068
+                                                                            echo 5615c2c2 iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
+                                                                            # shellcheck disable=SC2068
+                                                                            iteration --hash "$HASH" --index "$INDEX" --release "$RELEASE" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
                                                                         elif [[ "resolve-release" == "$TYPE_" ]]
                                                                         then
-                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 182712c3
-                                                                            iteration --index "$INDEX"
+                                                                            # shellcheck disable=SC2068
+                                                                            INDEX="$( yq eval ".index | tostring" - <<< "$PAYLOAD" )" || failure 1b20a908
+                                                                            HASH="$( yq eval ".hash | tostring" - <<< "$PAYLOAD" )" || failure 0467b530
+                                                                            # shellcheck disable=SC2068
+                                                                            echo 8fc778d9 iteration --hash "$HASH" --index "$INDEX" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] }
+                                                                            # shellcheck disable=SC2068
+                                                                            iteration --hash "$HASH" --index "$INDEX" ${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION[@]" "}" ] } &
+                                                                        else
+                                                                            echo IGNORES "TYPE_=$TYPE_" "TYPE=$TYPE" "CHANNEL=$CHANNEL"
                                                                         fi
                                                                     fi
                                                                 fi
