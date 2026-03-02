@@ -104,6 +104,7 @@
                                                                                 flock -x 203
                                                                                 if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                 then
+                                                                                    nohup "$0" --application "$APPLICATION" --hash "$HASH" --index "$INDEX" --script "$SCRIPT" &
                                                                                 else
                                                                                     export APPLICATION
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
