@@ -169,7 +169,7 @@
                                                                             HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                             INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                             SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure b85b0a3d
-                                                                            iteration --application "$APPLICATION --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
+                                                                            iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
                                                                         fi
                                                                 fi
                                                             done
