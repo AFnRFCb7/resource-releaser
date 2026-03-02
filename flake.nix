@@ -157,20 +157,18 @@
                                                                 read -r TYPE || failure c67a60c1
                                                                 read -r CHANNEL || failure deaeb31d
                                                                 read -r PAYLOAD || failure 27fe0fb0
-                                                                if [[ "$TYPE" == "message" ]]
+                                                                if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                 then
-                                                                    if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
+                                                                    TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
+                                                                    echo "TYPE=$TYPE_"
+                                                                    if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
-                                                                        TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
-                                                                        echo "TYPE=$TYPE_"
-                                                                        if [[ "$TYPE_" == "valid-init" ]]
-                                                                        then
-                                                                            APPLICATION="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
-                                                                            HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
-                                                                            INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
-                                                                            SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure b85b0a3d
-                                                                            iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
-                                                                        fi
+                                                                        APPLICATION="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
+                                                                        HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
+                                                                        INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
+                                                                        SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure b85b0a3d
+                                                                        iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
+                                                                    fi
                                                                 fi
                                                             done
                                                         '' ;
