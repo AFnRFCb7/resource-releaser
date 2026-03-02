@@ -62,6 +62,7 @@
                                                                             ] ;
                                                                         text =
                                                                             ''
+                                                                                ITERATION="$0"
                                                                                 while [[ "$#" -gt 0 ]]
                                                                                 do
                                                                                     case "$1" in
@@ -104,7 +105,7 @@
                                                                                 flock -x 203
                                                                                 if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                 then
-                                                                                    nohup "$0" --application "$APPLICATION" --hash "$HASH" --index "$INDEX" --script "$SCRIPT" &
+                                                                                    nohup "$ITERATION" --application "$APPLICATION" --hash "$HASH" --index "$INDEX" --script "$SCRIPT" &
                                                                                 else
                                                                                     export APPLICATION
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
@@ -128,7 +129,7 @@
                                                                                                 --arg HASH "$HASH" \
                                                                                                 --arg INDEX "$INDEX" \
                                                                                                 --arg STANDARD_ERROR "$STANDARD_ERROR" \
-                                                                                                --arg STANDARD_OUTPUT "$STANDARD_OUTPUT \
+                                                                                                --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" \
                                                                                                 --arg STATUS "$STATUS" \
                                                                                                 '{
                                                                                                     "application" : $APPLICATION ,
