@@ -120,7 +120,7 @@
                                                                                     STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure d3e55660
                                                                                     if [[ "$STATUS" == 0 ]] && [[ -s "$STANDARD_ERROR_FILE" ]]
                                                                                     then
-                                                                                        ARCHIVE="$( mktemp --suffix ".tar.zstd" ) || failure ebb3e66d
+                                                                                        ARCHIVE="$( mktemp --suffix ".tar.zstd" )" || failure ebb3e66d
                                                                                         tar --zstd --create -file "$ARCHIVE" --remove-files "${ root-directory }/$INDEX" "${ resources-directory }/applications/$INDEX" "${ resources-directory }/$HASH" "${ resources-directory }/locks/$HASH" "${ resources-directory }/locks/$INDEX" "${ resources-directory }/mounts/$INDEX" "${ resources-directory }/originatory-pids/$INDEX"
                                                                                         JSON="$(
                                                                                             jq \
