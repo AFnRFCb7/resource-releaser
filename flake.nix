@@ -12,12 +12,8 @@
                             implementation =
                                 {
                                     channel ,
-                                    gc-roots-directory ,
                                     resources-directory ,
-                                    root-directory ,
-                                    locks-directory ,
-                                    mounts-directory ,
-                                    quarantine-directory
+                                    root-directory
                                 } :
                                     let
                                         application =
@@ -184,10 +180,8 @@
                                         {
                                             channel ? "c8807213" ,
                                             expected ? "24a5ba9c" ,
-                                            gc-roots-directory ? "8584bd77" ,
-                                            locks-directory ? "4c3fa402" ,
-                                            mounts-directory ? "cfef9d2a" ,
-                                            quarantine-directory ? "58c023ee"
+                                            resources-directory ? "543e7b54" ,
+                                            root-directory ? "7e9ec14f"
                                         } :
                                             pkgs.stdenv.mkDerivation
                                                 {
@@ -203,10 +197,8 @@
                                                                                 implementation
                                                                                     {
                                                                                         channel = channel ;
-                                                                                        gc-roots-directory = gc-roots-directory ;
-                                                                                        locks-directory = locks-directory ;
-                                                                                        mounts-directory = mounts-directory ;
-                                                                                        quarantine-directory = quarantine-directory ;
+                                                                                        resources-directory = resources-directory ;
+                                                                                        root-directory = root-directory ;
                                                                                     }
                                                                             ) ;
                                                                     in
