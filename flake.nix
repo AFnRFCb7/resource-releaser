@@ -45,7 +45,7 @@
                                                                                             name = "release-application" ;
                                                                                             extraBwrapArgs =
                                                                                                 [
-                                                                                                    "--ro-bind ${ mounts-directory }/$INDEX /mount"
+                                                                                                    "--ro-bind ${ resources-directory }/mounts/$INDEX /mount"
                                                                                                     "--tmpfs /scratch"
                                                                                                 ] ;
                                                                                             runScript =
