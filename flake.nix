@@ -87,7 +87,7 @@
                                                                                             ;;
                                                                                     esac
                                                                                 done
-                                                                                rm ${ resources-directory }/marks/$INDEX
+                                                                                rm "${ resources-directory }/marks/$INDEX"
                                                                                 find "${ resources-directory }/originator-pids/$INDEX" | while read -r PID_FILE
                                                                                 do
                                                                                     PID="$( basename "$PID_FILE" )" || failure 6142318a
