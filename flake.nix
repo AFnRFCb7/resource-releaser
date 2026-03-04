@@ -133,7 +133,7 @@
                                                                                         echo 7e1212fd eed5220f >> /tmp/DEBUG
                                                                                         ARCHIVE="$( mktemp --suffix ".tar.zstd" )" || failure ebb3e66d
                                                                                         echo 7e1212fd 21d8f761 >> /tmp/DEBUG
-                                                                                        tar --zstd --create -file "$ARCHIVE" --remove-files "${ root-directory }/$INDEX" "${ resources-directory }/applications/$INDEX" "${ resources-directory }/$HASH" "${ resources-directory }/locks/$HASH" "${ resources-directory }/locks/$INDEX" "${ resources-directory }/mounts/$INDEX" "${ resources-directory }/originatory-pids/$INDEX"
+                                                                                        tar --zstd --create --file "$ARCHIVE" --remove-files "${ root-directory }/$INDEX" "${ resources-directory }/applications/$INDEX" "${ resources-directory }/$HASH" "${ resources-directory }/locks/$HASH" "${ resources-directory }/locks/$INDEX" "${ resources-directory }/mounts/$INDEX" "${ resources-directory }/originatory-pids/$INDEX"
                                                                                         echo 7e1212fd 5a08bfde >> /tmp/DEBUG
                                                                                         JSON="$(
                                                                                             jq \
