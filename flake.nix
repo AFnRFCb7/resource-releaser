@@ -38,6 +38,7 @@
                                                                                 pkgs.jq
                                                                                 pkgs.nix
                                                                                 pkgs.xz
+                                                                                pkgs.zstd
                                                                                 failure
                                                                                 (
                                                                                     pkgs.buildFHSUserEnv
