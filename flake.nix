@@ -138,7 +138,7 @@
                                                                                         echo 7e1212fd 5a08bfde >> /tmp/DEBUG
                                                                                         JSON="$(
                                                                                             jq \
-                                                                                                --null-argument \
+                                                                                                --null-input \
                                                                                                 --arg APPLICATION "$APPLICATION" \
                                                                                                 --arg HASH "$HASH" \
                                                                                                 --arg INDEX "$INDEX" \
