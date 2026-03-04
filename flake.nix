@@ -128,7 +128,7 @@
                                                                                     STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure dd6c09a4
                                                                                     STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure d3e55660
                                                                                     echo 7e1212fd 8fbd9d3a "STATUS=$STATUS" "STANDARD_ERROR=$STANDARD_ERROR" >> /tmp/DEBUG
-                                                                                    if [[ "$STATUS" == 0 ]] && [[ -s "$STANDARD_ERROR_FILE" ]]
+                                                                                    if [[ "$STATUS" == 0 ]] && [[ ! -s "$STANDARD_ERROR_FILE" ]]
                                                                                     then
                                                                                         echo 7e1212fd eed5220f >> /tmp/DEBUG
                                                                                         ARCHIVE="$( mktemp --suffix ".tar.zstd" )" || failure ebb3e66d
