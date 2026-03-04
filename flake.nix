@@ -62,6 +62,7 @@
                                                                             ] ;
                                                                         text =
                                                                             ''
+                                                                                echo 7e1212fd 76570e66 >> /tmp/DEBUG
                                                                                 ITERATION="$0"
                                                                                 while [[ "$#" -gt 0 ]]
                                                                                 do
@@ -87,12 +88,15 @@
                                                                                             ;;
                                                                                     esac
                                                                                 done
+                                                                                echo 7e1212fd e6f55c16 >> /tmp/DEBUG
                                                                                 rm "${ resources-directory }/marks/$INDEX"
+                                                                                echo 7e1212fd ec45f207 >> /tmp/DEBUG
                                                                                 find "${ resources-directory }/originator-pids/$INDEX" -mindepth 1 -maxdepth 1 -type f | while read -r PID_FILE
                                                                                 do
                                                                                     PID="$( basename "$PID_FILE" )" || failure 6142318a
                                                                                     tail --follow /dev/null --pid "$PID"
                                                                                 done
+                                                                                echo 7e1212fd 6bf14776 >> /tmp/DEBUG
                                                                                 find ${ root-directory } -type l | while read -r LINK
                                                                                 do
                                                                                     RESOURCE="$( readlink --canonicalize "$LINK" )" || failure 64949f94
@@ -101,12 +105,16 @@
                                                                                         inotify-wait --event delete-self "$LINK" || true
                                                                                     fi
                                                                                 done
+                                                                                echo 7e1212fd 65d2c5a2 >> /tmp/DEBUG
                                                                                 exec 203> "${ resources-directory }/locks/$HASH"
                                                                                 flock -x 203
+                                                                                echo 7e1212fd 7050989e >> /tmp/DEBUG
                                                                                 if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                 then
+                                                                                    echo 7e1212fd b3c4854e >> /tmp/DEBUG
                                                                                     nohup "$ITERATION" --application "$APPLICATION" --hash "$HASH" --index "$INDEX" --script "$SCRIPT" &
                                                                                 else
+                                                                                    echo 7e1212fd c3c16c3d >> /tmp/DEBUG
                                                                                     export APPLICATION
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
                                                                                     STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
@@ -167,7 +175,9 @@
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                         SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure b85b0a3d
-                                                                        iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
+                                                                        echo 7e1212fd eddc8d56 >> /tmp/DEBUG
+                                                                        echo iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
+                                                                        nohup iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT" &
                                                                     fi
                                                                 fi
                                                             done
