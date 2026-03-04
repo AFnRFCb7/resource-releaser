@@ -91,7 +91,7 @@
                                                                                 find "${ resources-directory }/originator-pids/$INDEX" -mindepth 1 -maxdepth 1 -type f | while read -r PID_FILE
                                                                                 do
                                                                                     PID="$( basename "$PID_FILE" )" || failure 6142318a
-                                                                                    tail --follow /dev/null "$PID"
+                                                                                    tail --follow /dev/null --pid i"$PID"
                                                                                 done
                                                                                 find ${ root-directory } -type l | while read -r LINK
                                                                                 do
