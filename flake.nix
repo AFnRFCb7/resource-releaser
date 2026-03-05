@@ -68,10 +68,6 @@
                                                                                 while [[ "$#" -gt 0 ]]
                                                                                 do
                                                                                     case "$1" in
-                                                                                        --application)
-                                                                                            APPLICATION="$2"
-                                                                                            shift 2
-                                                                                            ;;
                                                                                         --hash)
                                                                                             HASH="$2"
                                                                                             shift 2
@@ -80,8 +76,8 @@
                                                                                             INDEX="$2"
                                                                                             shift 2
                                                                                             ;;
-                                                                                        --script)
-                                                                                            SCRIPT="$2"
+                                                                                        --release)
+                                                                                            RELEASE="$2"
                                                                                             shift 2
                                                                                             ;;
                                                                                         *)
@@ -113,7 +109,7 @@
                                                                                 if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                 then
                                                                                     echo 7e1212fd b3c4854e >> /tmp/DEBUG
-                                                                                    nohup "$ITERATION" --application "$APPLICATION" --hash "$HASH" --index "$INDEX" --script "$SCRIPT" &
+                                                                                    nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$RELEASE" &
                                                                                 else
                                                                                     echo 7e1212fd c3c16c3d >> /tmp/DEBUG
                                                                                     export APPLICATION
@@ -139,17 +135,16 @@
                                                                                         JSON="$(
                                                                                             jq \
                                                                                                 --null-input \
-                                                                                                --arg APPLICATION "$APPLICATION" \
                                                                                                 --arg HASH "$HASH" \
                                                                                                 --arg INDEX "$INDEX" \
+                                                                                                --arg RELEASE "$RELEASE" \
                                                                                                 --arg STANDARD_ERROR "$STANDARD_ERROR" \
                                                                                                 --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" \
                                                                                                 --arg STATUS "$STATUS" \
                                                                                                 '{
-                                                                                                    "application" : $APPLICATION ,
                                                                                                     "hash" : $HASH ,
                                                                                                     "index" : $INDEX ,
-                                                                                                    "script" : $SCRIPT ,
+                                                                                                    "release" : $RELEASE ,
                                                                                                     "standard-error" : $STANDARD_ERROR ,
                                                                                                     "standard-output" : $STANDARD_OUTPUT ,
                                                                                                     "status" : $STATUS ,
@@ -180,13 +175,11 @@
                                                                     echo "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
-                                                                        APPLICATION="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
-                                                                        SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure b85b0a3d
+                                                                        RELEASE="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
                                                                         echo 7e1212fd eddc8d56 >> /tmp/DEBUG
-                                                                        echo iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT"
-                                                                        nohup iteration --application "$APPLICATION" --index "$INDEX" --hash "$HASH" --script "$SCRIPT" &
+                                                                        nohup iteration --index "$INDEX" --hash "$HASH" --release "$RELEASE" &
                                                                     fi
                                                                 fi
                                                             done
