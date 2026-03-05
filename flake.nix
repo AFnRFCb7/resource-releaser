@@ -99,7 +99,7 @@
                                                                                     echo 7e1212fd 61ab71c6
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
                                                                                     STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
-                                                                                    export MOUNT="${ resourced-directory }/mounts/$INDEX"
+                                                                                    export MOUNT="${ resources-directory }/mounts/$INDEX"
                                                                                     echo 7e1212fd b708335f
                                                                                     if "$RELEASE/bin/release" > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                     then
