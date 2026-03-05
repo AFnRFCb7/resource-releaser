@@ -63,7 +63,7 @@
                                                                             ] ;
                                                                         text =
                                                                             ''
-                                                                                echo 7e1212fd 76570e66 >> /tmp/DEBUG
+                                                                                echo 7e1212fd 76570e66
                                                                                 ITERATION="$0"
                                                                                 while [[ "$#" -gt 0 ]]
                                                                                 do
@@ -178,7 +178,7 @@
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                         RELEASE="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
-                                                                        echo 7e1212fd eddc8d56 >> /tmp/DEBUG
+                                                                        echo 7e1212fd eddc8d56
                                                                         nohup iteration --index "$INDEX" --hash "$HASH" --release "$RELEASE" &
                                                                     fi
                                                                 fi
