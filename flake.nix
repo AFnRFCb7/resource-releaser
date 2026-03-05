@@ -86,11 +86,16 @@
                                                                                     esac
                                                                                 done
                                                                                 rm "${ resources-directory }/marks/$INDEX"
+                                                                                echo 7e1212fd e5baf460
                                                                                 find "${ resources-directory }/originator-pids/$INDEX" -mindepth 1 -maxdepth 1 -type f | while read -r PID_FILE
                                                                                 do
+                                                                                    echo 7e1212fd 4e19eed8
                                                                                     PID="$( basename "$PID_FILE" )" || failure 6142318a
+                                                                                    echo 7e1212fd 665f4553 "PID=$PID"
                                                                                     tail --follow /dev/null --pid "$PID"
+                                                                                    echo 7e1212fd e83f5a97
                                                                                 done
+                                                                                echo 7e1212fd 24aab83b
                                                                                 find ${ root-directory } -type l | while read -r LINK
                                                                                 do
                                                                                     RESOURCE="$( readlink --canonicalize "$LINK" )" || failure 64949f94
