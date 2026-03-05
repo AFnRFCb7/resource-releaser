@@ -40,26 +40,6 @@
                                                                                 pkgs.xz
                                                                                 pkgs.zstd
                                                                                 failure
-                                                                                (
-                                                                                    pkgs.buildFHSUserEnv
-                                                                                        {
-                                                                                            name = "release-application" ;
-                                                                                            extraBwrapArgs =
-                                                                                                [
-                                                                                                    "--ro-bind ${ resources-directory }/mounts/$INDEX /mount"
-                                                                                                    "--tmpfs /scratch"
-                                                                                                ] ;
-                                                                                            runScript =
-                                                                                                let
-                                                                                                    application =
-                                                                                                        pkgs.writeShellApplication
-                                                                                                            {
-                                                                                                                name = "runScript" ;
-                                                                                                                text = "$APPLICATION" ;
-                                                                                                            } ;
-                                                                                                    in "${ application }/bin/runScript" ;
-                                                                                        }
-                                                                                )
                                                                             ] ;
                                                                         text =
                                                                             ''
@@ -119,9 +99,9 @@
                                                                                     echo 7e1212fd 61ab71c6
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
                                                                                     STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
-                                                                                    export APPLICATION="$RELEASE/bin/release"
+                                                                                    export MOUNT="/mount/$INDEX"
                                                                                     echo 7e1212fd b708335f
-                                                                                    if release-application > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
+                                                                                    if "$RELEASE/bin/release" > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                     then
                                                                                         STATUS="$?"
                                                                                     else
@@ -130,6 +110,9 @@
                                                                                     echo 7e1212fd fecf7d30
                                                                                     STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure dd6c09a4
                                                                                     STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure d3e55660
+                                                                                    echo 7e1212fd 2d860412
+                                                                                    cat release-application
+                                                                                    echo 7e1212fd 104961fe
                                                                                     echo 7e1212fd "STATUS=$STATUS" "STANDARD_ERROR=$STANDARD_ERROR" a089f604
                                                                                     if [[ "$STATUS" == 0 ]] && [[ ! -s "$STANDARD_ERROR_FILE" ]]
                                                                                     then
