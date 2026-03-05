@@ -116,6 +116,7 @@
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
                                                                                     STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
                                                                                     echo 7e1212fd 84201603 >> /tmp/DEBUG
+                                                                                    export APPLICATION="$RELEASE"
                                                                                     if release-application > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                     then
                                                                                         STATUS="$?"
