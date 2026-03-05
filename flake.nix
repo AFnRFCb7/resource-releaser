@@ -98,32 +98,42 @@
                                                                                 echo 7e1212fd 24aab83b
                                                                                 find ${ root-directory } -type l | while read -r LINK
                                                                                 do
+                                                                                    echo 7e1212fd 81144ffe
                                                                                     RESOURCE="$( readlink --canonicalize "$LINK" )" || failure 64949f94
+                                                                                    echo 7e1212fd b81cd837 "RESOURCE=$RESOURCE"
                                                                                     if [[ "$RESOURCE" == "${ resources-directory }/mounts/$INDEX" ]]
                                                                                     then
+                                                                                        echo 7e1212fd ad6d755e
                                                                                         inotify-wait --event delete-self "$LINK" || true
                                                                                     fi
                                                                                 done
+                                                                                echo 7e1212fd 8accd953
                                                                                 exec 203> "${ resources-directory }/locks/$HASH"
                                                                                 flock -x 203
+                                                                                echo 7e1212fd af7aa8dc
                                                                                 if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                 then
+                                                                                    echo 7e1212fd 65d51029
                                                                                     nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$RELEASE" &
                                                                                 else
+                                                                                    echo 7e1212fd 61ab71c6
                                                                                     STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
                                                                                     STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
                                                                                     export APPLICATION="$RELEASE/bin/release"
+                                                                                    echo 7e1212fd b708335f
                                                                                     if release-application > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                     then
                                                                                         STATUS="$?"
                                                                                     else
                                                                                         STATUS="$?"
                                                                                     fi
+                                                                                    echo 7e1212fd fecf7d30
                                                                                     STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure dd6c09a4
                                                                                     STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure d3e55660
+                                                                                    echo 7e1212fd "STATUS=$STATUS" "STANDARD_ERROR=$STANDARD_ERROR" a089f604
                                                                                     if [[ "$STATUS" == 0 ]] && [[ ! -s "$STANDARD_ERROR_FILE" ]]
                                                                                     then
-                                                                                        echo 7e1212fd eed5220f
+                                                                                        echo 7e1212fd 1d0b8faf
                                                                                         ARCHIVE="$( mktemp --suffix ".tar.zstd" )" || failure ebb3e66d
                                                                                         echo 7e1212fd 21d8f761
                                                                                         tar --zstd --create --file "$ARCHIVE" --remove-files "${ root-directory }/$INDEX" "${ resources-directory }/applications/$INDEX" "${ resources-directory }/canonical/$HASH" "${ resources-directory }/locks/$HASH" "${ resources-directory }/locks/$INDEX" "${ resources-directory }/mounts/$INDEX" "${ resources-directory }/originator-pids/$INDEX"
