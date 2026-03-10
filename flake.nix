@@ -135,7 +135,7 @@
                                                                                                     "standard-error" : $STANDARD_ERROR ,
                                                                                                     "standard-output" : $STANDARD_OUTPUT ,
                                                                                                     "status" : $STATUS ,
-                                                                                                    "type" : "release"
+                                                                                                    "type" : "valid-release"
                                                                                                 }'
                                                                                         )" || failure 77f1e01c
                                                                                         echo 7e1212fd f0415d59
@@ -143,6 +143,30 @@
                                                                                         echo 7e1212fd 62e9ad0c
                                                                                         rm "$STANDARD_ERROR_FILE" "$STANDARD_OUTPUT_FILE"
                                                                                         echo 7e1212fd d7072a5d
+                                                                                    else
+                                                                                        mkdir --parents "${ resources-directory }/quarantine.release/resolutions"
+                                                                                        JSON="$(
+                                                                                            jq \
+                                                                                                --null-input \
+                                                                                                --arg HASH "$HASH" \
+                                                                                                --arg INDEX "$INDEX" \
+                                                                                                --arg RELEASE "$RELEASE \
+                                                                                                --arg STANDARD_ERROR "$STANDARD_ERROR" \
+                                                                                                --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" \
+                                                                                                --arg STATUS "$STATUS" \
+                                                                                                '{
+                                                                                                    "hash" : $HASH ,
+                                                                                                    "index" : $INDEX ,
+                                                                                                    "release" : $RELEASE ,
+                                                                                                    "standard-error" : $STANDARD_ERROR ,
+                                                                                                    "standard-output" : $STANDARD_OUTPUT ,
+                                                                                                    "status" : $STATUS ,
+                                                                                                    "type" : "invalid-release"
+                                                                                                }'
+                                                                                        )" || failure 5690
+                                                                                        yq eval --prettyPrint "." <<< "$JSON" > "${ resources-directory }/quarantine.release/log.yaml"
+                                                                                        chmod 0400 "${ resources-directory }/quarantine.release/log.yaml"
+                                                                                        redis-cli PUBLISH ${ channel } "$JSON"
                                                                                     fi
                                                                                 fi
                                                                             '' ;
