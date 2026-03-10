@@ -150,7 +150,7 @@
                                                                                                 --null-input \
                                                                                                 --arg HASH "$HASH" \
                                                                                                 --arg INDEX "$INDEX" \
-                                                                                                --arg RELEASE "$RELEASE \
+                                                                                                --arg RELEASE "$RELEASE" \
                                                                                                 --arg STANDARD_ERROR "$STANDARD_ERROR" \
                                                                                                 --arg STANDARD_OUTPUT "$STANDARD_OUTPUT" \
                                                                                                 --arg STATUS "$STATUS" \
