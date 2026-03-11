@@ -100,7 +100,7 @@
                                                                                     export STANDARD_ERROR_FILE="${ resources-directory }/log/$INDEX/release.standard-error.log"
                                                                                     export STANDARD_OUTPUT_FILE="${ resources-directory }/log/$INDEX/release.standard-output.log"
                                                                                     export MOUNT="${ resources-directory }/mounts/$INDEX"
-                                                                                    echo 7e1212fd b708335f
+                                                                                    echo 7e1212fd 31614
                                                                                     if "$RELEASE/bin/release" > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                     then
                                                                                         STATUS="$?"
