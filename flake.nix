@@ -5,6 +5,9 @@
             {
                 lib =
                     {
+                        coreutils ,
+                        jq ,
+                        redis ,
                         failure ,
                         pkgs
                     } :
