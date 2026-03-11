@@ -90,6 +90,7 @@
                                                                                         echo 7e1212fd 76570e66
                                                                                         ITERATION="$0"
                                                                                         RESOLUTIONS=()
+                                                                                        RESOLUTION_ARGS=()
                                                                                         while [[ "$#" -gt 0 ]]
                                                                                         do
                                                                                             case "$1" in
@@ -108,6 +109,7 @@
                                                                                                     ;;
                                                                                                 --resolution)
                                                                                                     RESOLUTIONS+=("$2")
+                                                                                                    RESOLUTION_ARGS+=("--resolution $2")
                                                                                                     shift 2
                                                                                                     ;;
                                                                                                 *)
@@ -144,7 +146,7 @@
                                                                                         if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                         then
                                                                                             echo 7e1212fd 65d51029
-                                                                                            nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$APPLICATION" "$SCRIPT" &
+                                                                                            nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$APPLICATION" "$SCRIPT" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS_ARGS[@]" "}" ] }" &
                                                                                         else
                                                                                             echo 7e1212fd 61ab71c6
                                                                                             STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
@@ -247,6 +249,12 @@
                                                                         APPLICATION="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
+                                                                        mapfile -t RESOLUTIONS < <( yq eval '.release.resolutions // [] | .[]' <<< "$PAYLOAD" )
+                                                                        RELEASE_ARGS=()
+                                                                        for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
+                                                                        do
+                                                                            RESOLUTION_ARGS+=("--resolution $RESOLUTION")
+                                                                        done
                                                                         SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure 8159
                                                                         echo 7e1212fd eddc8d56
                                                                         nohup iteration --index "$INDEX" --hash "$HASH" --release "$APPLICATION" "$SCRIPT" &
