@@ -111,7 +111,7 @@
                                                                                     STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure dd6c09a4
                                                                                     STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure d3e55660
                                                                                     echo 7e1212fd 2d860412
-                                                                                    echo 7e1212fd "STATUS=$STATUS" "STANDARD_ERROR=$STANDARD_ERROR" a089f604
+                                                                                    echo 7e1212fd "STATUS=$STATUS" "STANDARD_ERROR_FILE=$STANDARD_ERROR_FILE" a089f604
                                                                                     if [[ "$STATUS" == 0 ]] && [[ ! -s "$STANDARD_ERROR_FILE" ]]
                                                                                     then
                                                                                         echo 7e1212fd 1d0b8faf
