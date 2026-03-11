@@ -97,8 +97,8 @@
                                                                                     nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$RELEASE" &
                                                                                 else
                                                                                     echo 7e1212fd 61ab71c6
-                                                                                    STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
-                                                                                    STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
+                                                                                    export STANDARD_ERROR_FILE="${ resources-directory }/log/$INDEX/release.standard-error.log"
+                                                                                    export STANDARD_ERROR_FILE="${ resources-directory }/log/$INDEX/release.standard-output.log"
                                                                                     export MOUNT="${ resources-directory }/mounts/$INDEX"
                                                                                     echo 7e1212fd b708335f
                                                                                     if "$RELEASE/bin/release" > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
@@ -162,10 +162,11 @@
                                                                     echo "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
+                                                                        yq eval --prettyPrint ".applications.release" <<< $PAYLOAD -
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                         RELEASE="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
-                                                                        echo 7e1212fd eddc8d56
+                                                                        echo 7e1212fd eddc8d56 "RELEASE=$RELEASE"
                                                                         nohup iteration --index "$INDEX" --hash "$HASH" --release "$RELEASE" &
                                                                     fi
                                                                 fi
