@@ -66,7 +66,7 @@
                                                                                     esac
                                                                                 done
                                                                                 rm "${ resources-directory }/marks/$INDEX"
-                                                                                echo 7e1212fd e5baf460
+                                                                                echo 7e1212fd e5baf460 "RELEASE=$RELEASE"
                                                                                 find "${ resources-directory }/originator-pids/$INDEX" -mindepth 1 -maxdepth 1 -type f | while read -r PID_FILE
                                                                                 do
                                                                                     echo 7e1212fd 4e19eed8
