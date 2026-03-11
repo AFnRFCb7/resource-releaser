@@ -216,7 +216,7 @@
                                                                                                 )" || failure 5690
                                                                                                 yq eval --prettyPrint "." <<< "$JSON" > "${ resources-directory }/quarantine.release/$INDEX/log.yaml"
                                                                                                 chmod 0400 "${ resources-directory }/quarantine.release/$INDEX/ log.yaml"
-                                                                                                for RESOLUTION in $RESOLUTIONS
+                                                                                                for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }
                                                                                                 do
                                                                                                     FILE="${ resources-directory }/quarantine.release/$INDEX/resolutions/$RESOLUTION.sh"
                                                                                                     DIR="$( dirname "$FILE" )" || failure 6344
