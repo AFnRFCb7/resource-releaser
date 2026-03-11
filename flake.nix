@@ -250,7 +250,7 @@
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                         mapfile -t RESOLUTIONS < <( yq eval '.release.resolutions // [] | .[]' <<< "$PAYLOAD" )
-                                                                        RELEASE_ARGS=()
+                                                                        RESOLUTION_ARGS=()
                                                                         for RESOLUTION in "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS[@]" "}" ] }"
                                                                         do
                                                                             RESOLUTION_ARGS+=("--resolution $RESOLUTION")
