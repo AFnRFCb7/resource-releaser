@@ -218,7 +218,7 @@
                                                                                                 chmod 0400 "${ resources-directory }/quarantine.release/$INDEX/ log.yaml"
                                                                                                 for RESOLUTION in "$RESOLUTIONS"
                                                                                                 do
-                                                                                                    FILE=${ resources-directory }/quarantine.release/$INDEX/resolutions/$RESOLUTION.sh"
+                                                                                                    FILE="${ resources-directory }/quarantine.release/$INDEX/resolutions/$RESOLUTION.sh"
                                                                                                     DIR="$( dirname "$FILE" )" || failure 6344
                                                                                                     mkdir --parents "$DIR"
                                                                                                     sed -e "s#\$HASH#$HASH#" -e "s#\$INDEX#$INDEX#" -e "w$FILE" ${ resolve }
