@@ -6,8 +6,10 @@
                 lib =
                     {
                         coreutils ,
+                        gnutar ,
                         jq ,
                         redis ,
+                        zstd ,
                         failure ,
                         pkgs
                     } :
