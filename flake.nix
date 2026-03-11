@@ -164,8 +164,8 @@
                                                                                                     "type" : "invalid-release"
                                                                                                 }'
                                                                                         )" || failure 5690
-                                                                                        yq eval --prettyPrint "." <<< "$JSON" > "${ resources-directory }/quarantine.release/log.yaml"
-                                                                                        chmod 0400 "${ resources-directory }/quarantine.release/log.yaml"
+                                                                                        yq eval --prettyPrint "." <<< "$JSON" > "${ resources-directory }/quarantine.release/$INDEX/log.yaml"
+                                                                                        chmod 0400 "${ resources-directory }/quarantine.release/$INDEX/ log.yaml"
                                                                                         redis-cli PUBLISH ${ channel } "$JSON"
                                                                                     fi
                                                                                 fi
