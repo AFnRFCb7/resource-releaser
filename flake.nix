@@ -245,7 +245,7 @@
                                                                 if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                 then
                                                                     echo 7e1212fd d11852ba
-                                                                    TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
+                                                                    TYPE_="$( yq eval ".type" <<< "$PAYLOAD" )" || failure 2ee1309a
                                                                     echo 7e1212fd d099b00a "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
