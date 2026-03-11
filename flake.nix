@@ -235,15 +235,18 @@
                                                         ] ;
                                                     text =
                                                         ''
+                                                            echo 7e1212fd e9df0e56
                                                             redis-cli SUBSCRIBE ${ channel } | while true
                                                             do
+                                                                echo 7e1212fd f3d638d6
                                                                 read -r TYPE || failure c67a60c1
                                                                 read -r CHANNEL || failure deaeb31d
                                                                 read -r PAYLOAD || failure 27fe0fb0
                                                                 if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                 then
+                                                                    echo 7e1212fd d11852ba
                                                                     TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
-                                                                    echo "TYPE=$TYPE_"
+                                                                    echo 7e1212fd d099b00a "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
                                                                         APPLICATION="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
