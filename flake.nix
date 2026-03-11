@@ -244,9 +244,10 @@
                                                                 read -r PAYLOAD || failure 27fe0fb0
                                                                 if [[ "$TYPE" == "message" ]] && [[ "${ channel }" == "$CHANNEL" ]]
                                                                 then
-                                                                    echo 7e1212fd d11852ba
-                                                                    TYPE_="$( yq eval ".type" <<< "$PAYLOAD" )" || failure 2ee1309a
-                                                                    echo 7e1212fd d099b00a "TYPE=$TYPE_"
+                                                                    echo 7e1212fd 2256
+                                                                    yq eval --prettyPrint "keys" <<< "$PAYLOAD"
+                                                                    TYPE_="$( yq eval ".type" <<< "$PAYLOAD" - )" || failure 2ee1309a
+                                                                    echo 7e1212fd 21037 "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
                                                                         APPLICATION="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
