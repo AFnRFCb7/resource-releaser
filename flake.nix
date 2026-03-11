@@ -146,7 +146,7 @@
                                                                                         if [[ -f ${ resources-directory }/marks/$INDEX ]]
                                                                                         then
                                                                                             echo 7e1212fd 65d51029
-                                                                                            nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$APPLICATION" "$SCRIPT" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTIONS_ARGS[@]" "}" ] }" &
+                                                                                            nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$APPLICATION" "$SCRIPT" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION_ARGS[@]" "}" ] }" &
                                                                                         else
                                                                                             echo 7e1212fd 61ab71c6
                                                                                             STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
@@ -257,7 +257,7 @@
                                                                         done
                                                                         SCRIPT="$( yq eval ".scripts.release.application" <<< "$PAYLOAD" - )" || failure 8159
                                                                         echo 7e1212fd eddc8d56
-                                                                        nohup iteration --index "$INDEX" --hash "$HASH" --release "$APPLICATION" "$SCRIPT" &
+                                                                        nohup iteration --index "$INDEX" --hash "$HASH" --release "$APPLICATION" "$SCRIPT" "${ builtins.concatStringsSep "" [ "$" "{" "RESOLUTION_ARGS[@]" "}" ] }" &
                                                                     fi
                                                                 fi
                                                             done
