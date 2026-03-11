@@ -162,7 +162,7 @@
                                                                     echo "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
-                                                                        yq eval --prettyPrint ".applications.release" <<< $PAYLOAD -
+                                                                        yq eval --prettyPrint ".applications.release" <<< "$PAYLOAD" -
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                         RELEASE="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
