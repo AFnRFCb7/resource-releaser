@@ -66,7 +66,7 @@
                                                                                     esac
                                                                                 done
                                                                                 rm "${ resources-directory }/marks/$INDEX"
-                                                                                echo 7e1212fd e5baf460
+                                                                                echo 7e1212fd e5baf460 "RELEASE=$RELEASE"
                                                                                 find "${ resources-directory }/originator-pids/$INDEX" -mindepth 1 -maxdepth 1 -type f | while read -r PID_FILE
                                                                                 do
                                                                                     echo 7e1212fd 4e19eed8
@@ -97,10 +97,10 @@
                                                                                     nohup "$ITERATION" --hash "$HASH" --index "$INDEX" --release "$RELEASE" &
                                                                                 else
                                                                                     echo 7e1212fd 61ab71c6
-                                                                                    STANDARD_ERROR_FILE="$( mktemp )" || failure 479f37a
-                                                                                    STANDARD_OUTPUT_FILE="$( mktemp )" || failure 9273f3b8
+                                                                                    export STANDARD_ERROR_FILE="${ resources-directory }/log/$INDEX/release.standard-error.log"
+                                                                                    export STANDARD_OUTPUT_FILE="${ resources-directory }/log/$INDEX/release.standard-output.log"
                                                                                     export MOUNT="${ resources-directory }/mounts/$INDEX"
-                                                                                    echo 7e1212fd b708335f
+                                                                                    echo 7e1212fd 31614 "RELEASE=$RELEASE"
                                                                                     if "$RELEASE/bin/release" > "$STANDARD_OUTPUT_FILE" 2> "$STANDARD_ERROR_FILE"
                                                                                     then
                                                                                         STATUS="$?"
@@ -111,7 +111,7 @@
                                                                                     STANDARD_ERROR="$( cat "$STANDARD_ERROR_FILE" )" || failure dd6c09a4
                                                                                     STANDARD_OUTPUT="$( cat "$STANDARD_OUTPUT_FILE" )" || failure d3e55660
                                                                                     echo 7e1212fd 2d860412
-                                                                                    echo 7e1212fd "STATUS=$STATUS" "STANDARD_ERROR=$STANDARD_ERROR" a089f604
+                                                                                    echo 7e1212fd "STATUS=$STATUS" "STANDARD_ERROR_FILE=$STANDARD_ERROR_FILE" a089f604
                                                                                     if [[ "$STATUS" == 0 ]] && [[ ! -s "$STANDARD_ERROR_FILE" ]]
                                                                                     then
                                                                                         echo 7e1212fd 1d0b8faf
@@ -162,10 +162,11 @@
                                                                     echo "TYPE=$TYPE_"
                                                                     if [[ "$TYPE_" == "valid-init" ]]
                                                                     then
+                                                                        yq eval --prettyPrint ".applications.release" <<< "$PAYLOAD" -
                                                                         HASH="$( yq eval ".hash" <<< "$PAYLOAD" - )" || failure 0e0c43b2
                                                                         INDEX="$( yq eval ".index" <<< "$PAYLOAD" - )" || failure 5e785a4f
                                                                         RELEASE="$( yq eval ".applications.release.application" <<< "$PAYLOAD" - )" || failure 2c46ecb8
-                                                                        echo 7e1212fd eddc8d56
+                                                                        echo 7e1212fd eddc8d56 "RELEASE=$RELEASE"
                                                                         nohup iteration --index "$INDEX" --hash "$HASH" --release "$RELEASE" &
                                                                     fi
                                                                 fi
